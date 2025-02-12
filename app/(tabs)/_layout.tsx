@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from "react-native"
 import { Tabs } from "expo-router"
 import { SymbolView } from "expo-symbols"
+import Icon from "@/components/icon"
 
 export default function TabLayout() {
 	return (
@@ -8,40 +9,42 @@ export default function TabLayout() {
 			screenOptions={{
 				headerShown: false,
 				tabBarShowLabel: false,
+				tabBarActiveTintColor: "blue",
 			}}
 		>
 			<Tabs.Screen
 				name="index"
 				options={{
-					tabBarIcon: () => (
-						<Image
-							source={require("../../assets/images/house.svg")}
-							style={styles.tabIcon}
-						></Image>
+					title: "Home",
+					tabBarIcon: ({ color, focused }) => (
+						<Icon
+							name="house"
+							color={focused ? color : "#000000"}
+						/>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="addExam"
+				options={{
+					title: "Add",
+					tabBarIcon: ({ color, focused }) => (
+						<Icon name="plus" color={focused ? color : "#000000"} />
 					),
 				}}
 			/>
 			<Tabs.Screen
 				name="analytics"
 				options={{
-					tabBarIcon: () => (
-						<Image
-							source={require("../../assets/images/chart-pie.svg")}
-							style={styles.tabIcon}
-						></Image>
+					title: "Analytics",
+					tabBarIcon: ({ color, focused }) => (
+						<Icon
+							name="chart"
+							color={focused ? color : "#000000"}
+						/>
 					),
 				}}
 			/>
 		</Tabs>
 	)
 }
-
-const styles = StyleSheet.create({
-	tabIcon: {
-		width: 50,
-		height: 50,
-	},
-	tabBar: {
-		backgroundColor: "red",
-	},
-})
