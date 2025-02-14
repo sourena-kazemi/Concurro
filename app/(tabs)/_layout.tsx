@@ -1,6 +1,7 @@
 import { Image, StyleSheet, View } from "react-native"
 import { Tabs } from "expo-router"
 import { SymbolView } from "expo-symbols"
+import { SQLiteProvider } from "expo-sqlite"
 import Icon from "@/components/icon"
 
 export default function TabLayout() {

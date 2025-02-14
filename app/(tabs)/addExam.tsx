@@ -1,5 +1,9 @@
 import { Text, View, TextInput, Button } from "react-native"
 import { useState } from "react"
+import { useSQLiteContext } from "expo-sqlite"
+import { router } from "expo-router"
+import { examDBInfo } from "@/types/types"
+
 export default function AddExam() {
 	const [name, setName] = useState("")
 	const [size, setSize] = useState(105)
@@ -15,7 +19,22 @@ export default function AddExam() {
 
 	const [error, setError] = useState("")
 
-	const handleSubmit = () => {
+	const db = useSQLiteContext()
+
+	const validate = () => {
+		if (
+			!name ||
+			!size ||
+			!mathStart ||
+			!mathEnd ||
+			!physicsStart ||
+			!physicsEnd ||
+			!chemistryStart ||
+			!chemistryEnd
+		) {
+			setError("All Fields Must Be Filled !")
+			return false
+		}
 		const numberOfQuestions =
 			mathEnd -
 			mathStart +
@@ -24,7 +43,7 @@ export default function AddExam() {
 			(chemistryEnd - chemistryStart + 1)
 		if (numberOfQuestions !== size) {
 			setError("Wrong Number of Questions !")
-			return
+			return false
 		}
 		const mathPhysicsOverlap =
 			mathStart <= physicsEnd && physicsStart <= mathEnd
@@ -39,10 +58,37 @@ export default function AddExam() {
 			physicsChemistryOverlap
 		) {
 			setError("Ranges Overlap !")
-			return
+			return false
 		}
 
 		setError("")
+		return true
+	}
+
+	const storeExamData = async () => {
+		const examData: examDBInfo = {
+			name,
+			size,
+			status: "CREATED",
+			mathStart,
+			mathEnd,
+			physicsStart,
+			physicsEnd,
+			chemistryStart,
+			chemistryEnd,
+		}
+
+		const result = await db.runAsync(
+			`INSERT INTO exams (name, size, status, mathStart, mathEnd, physicsStart, physicsEnd, chemistryStart, chemistryEnd) VALUES (?,?,?,?,?,?,?,?,?)`,
+			Object.values(examData)
+		)
+	}
+
+	const handleSubmit = async () => {
+		if (validate()) {
+			storeExamData()
+			router.replace("/(tabs)")
+		}
 	}
 
 	return (
