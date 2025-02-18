@@ -1,3 +1,5 @@
+import { topics } from "@/constants/topics"
+
 export type examStatus = "CREATED" | "IN-PROGRESS" | "COMPLETED"
 
 export type examInfo = {
@@ -24,3 +26,15 @@ export type examPreview = Omit<
 	| "chemistryStart"
 	| "chemistryEnd"
 >
+
+type topic = keyof typeof topics
+
+type section = topic[]
+
+type tab = {
+	name: string
+	previewName: string
+	sections: section[]
+}
+
+export type layout = tab[]
