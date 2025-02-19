@@ -27,7 +27,27 @@ export type examPreview = Omit<
 	| "chemistryEnd"
 >
 
+export type questionStatus = "CORRECT" | "WRONG" | "UNANSWERED"
+
+export type subject =
+	| "CALCULUS"
+	| "GEOMETRY"
+	| "DISCRETE"
+	| "STATISTICS"
+	| "PHYSICS"
+	| "CHEMISTRY"
+
+export type previewSubject = "MATHEMATICS" | "PHYSICS" | "CHEMISTRY"
+
 type topic = keyof typeof topics
+
+export type questionInfo = {
+	number: number
+	status: questionStatus
+	subject: subject
+	topic: topic
+	examId: number
+}
 
 type section = topic[]
 

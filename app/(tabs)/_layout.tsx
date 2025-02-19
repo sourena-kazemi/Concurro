@@ -11,6 +11,7 @@ export default function TabLayout() {
 				headerShown: false,
 				tabBarShowLabel: false,
 				tabBarActiveTintColor: "blue",
+				animation: "shift",
 			}}
 		>
 			<Tabs.Screen
