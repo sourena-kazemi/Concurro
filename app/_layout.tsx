@@ -14,7 +14,6 @@ export default function RootLayout() {
 		<SQLiteProvider databaseName="database.db" onInit={createDBIfNeeded}>
 			<Stack screenOptions={{ headerShown: false }}>
 				<Stack.Screen name="(tabs)" />
-				<Stack.Screen name="exam" />
 			</Stack>
 		</SQLiteProvider>
 	)

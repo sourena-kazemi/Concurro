@@ -1,8 +1,8 @@
-import { mathLayout } from "@/constants/layouts"
+import { chemistryLayout } from "@/constants/layouts"
 import {
+	type section,
 	type questionInfo,
 	type questionStatus,
-	type section,
 } from "@/types/types"
 import { useEffect, useState } from "react"
 import TopicList from "./TopicSelector"
@@ -15,13 +15,15 @@ type props = {
 	examId: string
 }
 
-export default function MathPanel({
+export default function ChemistryPanel({
 	storeHandler,
 	questionNumber,
 	examId,
 }: props) {
-	const [currentTab, setCurrentTab] = useState("calculus")
-	const [sections, setSections] = useState<section[]>(mathLayout[0].sections)
+	const [currentTab, setCurrentTab] = useState("memorization")
+	const [sections, setSections] = useState<section[]>(
+		chemistryLayout[0].sections
+	)
 	const [topic, setTopic] = useState("")
 	const [isTopicChosen, setIsTopicChosen] = useState(false)
 	const [status, setStatus] = useState<questionStatus>("CORRECT")
@@ -30,8 +32,7 @@ export default function MathPanel({
 		const questionData: questionInfo = {
 			number: +questionNumber,
 			status,
-			// @ts-ignore
-			subject: currentTab.toUpperCase(),
+			subject: "CHEMISTRY",
 			// @ts-ignore
 			topic,
 			examId: +examId,
@@ -40,7 +41,7 @@ export default function MathPanel({
 	}
 
 	useEffect(() => {
-		mathLayout.map((tab) => {
+		chemistryLayout.map((tab) => {
 			if (tab.name === currentTab) {
 				setSections(tab.sections)
 			}
@@ -56,7 +57,7 @@ export default function MathPanel({
 				/>
 			) : (
 				<TopicList
-					layout={mathLayout}
+					layout={chemistryLayout}
 					tabHandler={setCurrentTab}
 					sections={sections}
 					topicHandler={setTopic}

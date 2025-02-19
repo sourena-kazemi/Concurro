@@ -49,7 +49,7 @@ export type questionInfo = {
 	examId: number
 }
 
-type section = topic[]
+export type section = topic[]
 
 type tab = {
 	name: string
