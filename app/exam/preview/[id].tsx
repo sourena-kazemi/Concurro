@@ -18,7 +18,7 @@ export default function Exam() {
 		)
 		setExamInfo(result)
 	}
-	const fetchExamStatus = async () => {
+	const fetchExamQuestions = async () => {
 		const result = await db.getAllAsync<questionInfo>(
 			"SELECT * FROM questions WHERE exam = ?",
 			id
@@ -36,7 +36,7 @@ export default function Exam() {
 	useFocusEffect(
 		useCallback(() => {
 			fetchExamInfo()
-			fetchExamStatus()
+			fetchExamQuestions()
 		}, [])
 	)
 
@@ -49,11 +49,12 @@ export default function Exam() {
 			</Text>
 			<Button
 				title="Update"
-				onPress={() =>
+				onPress={() => {
 					router.navigate(
 						`/exam/update/${lastQuestion + 1}?exam=${id}`
 					)
-				}
+				}}
+				disabled={examInfo?.status === "COMPLETED"}
 			/>
 		</View>
 	)

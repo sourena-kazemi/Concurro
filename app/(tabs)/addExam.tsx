@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button } from "react-native"
+import { Text, View, TextInput, Pressable } from "react-native"
 import { useState } from "react"
 import { useSQLiteContext } from "expo-sqlite"
 import { router } from "expo-router"
@@ -92,71 +92,79 @@ export default function AddExam() {
 	}
 
 	return (
-		<View
-			style={{
-				flex: 1,
-				justifyContent: "center",
-				alignItems: "center",
-			}}
-		>
-			<Text>Add Exam</Text>
+		<View className="flex-1 items-center bg-background w-full gap-3 px-4 py-20 ">
+			<Text className="text-text text-3xl">Add Exam</Text>
 			<TextInput
+				className="text-background placeholder:text-background bg-primary rounded-xl w-full p-3"
 				placeholder="Name of the exam"
 				onChangeText={(newText) => setName(newText)}
 			/>
-			<Text>Number of questions</Text>
+			<Text className="text-text text-xl mt-3">Number of questions</Text>
 			<TextInput
+				className="text-background placeholder:text-background bg-primary rounded-xl w-full p-3"
 				placeholder="105"
-				defaultValue="105"
 				keyboardType="numeric"
 				onChangeText={(newValue) => setSize(+newValue)}
 			></TextInput>
 
-			<Text>Mathematics Range</Text>
-			<TextInput
-				placeholder="1"
-				defaultValue="1"
-				keyboardType="numeric"
-				onChangeText={(newValue) => setMathStart(+newValue)}
-			></TextInput>
-			<TextInput
-				placeholder="40"
-				defaultValue="40"
-				keyboardType="numeric"
-				onChangeText={(newValue) => setMathEnd(+newValue)}
-			></TextInput>
+			<Text className="text-text text-xl mt-3">Mathematics Range</Text>
+			<View className="flex flex-row w-full gap-3">
+				<TextInput
+					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					placeholder="1"
+					keyboardType="numeric"
+					onChangeText={(newValue) => setMathStart(+newValue)}
+				></TextInput>
+				<TextInput
+					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					placeholder="40"
+					keyboardType="numeric"
+					onChangeText={(newValue) => setMathEnd(+newValue)}
+				></TextInput>
+			</View>
 
-			<Text>Physics Range</Text>
-			<TextInput
-				placeholder="41"
-				defaultValue="41"
-				keyboardType="numeric"
-				onChangeText={(newValue) => setPhysicsStart(+newValue)}
-			></TextInput>
-			<TextInput
-				placeholder="75"
-				defaultValue="75"
-				keyboardType="numeric"
-				onChangeText={(newValue) => setPhysicsEnd(+newValue)}
-			></TextInput>
+			<Text className="text-text text-xl mt-3">Physics Range</Text>
+			<View className="flex flex-row w-full gap-3">
+				<TextInput
+					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					placeholder="41"
+					keyboardType="numeric"
+					onChangeText={(newValue) => setPhysicsStart(+newValue)}
+				></TextInput>
+				<TextInput
+					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					placeholder="75"
+					keyboardType="numeric"
+					onChangeText={(newValue) => setPhysicsEnd(+newValue)}
+				></TextInput>
+			</View>
 
-			<Text>Chemistry Range</Text>
-			<TextInput
-				placeholder="76"
-				defaultValue="76"
-				keyboardType="numeric"
-				onChangeText={(newValue) => setChemistryStart(+newValue)}
-			></TextInput>
-			<TextInput
-				placeholder="105"
-				defaultValue="105"
-				keyboardType="numeric"
-				onChangeText={(newValue) => setChemistryEnd(+newValue)}
-			></TextInput>
+			<Text className="text-text text-xl mt-3">Chemistry Range</Text>
+			<View className="flex flex-row w-full gap-3">
+				<TextInput
+					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					placeholder="76"
+					keyboardType="numeric"
+					onChangeText={(newValue) => setChemistryStart(+newValue)}
+				></TextInput>
+				<TextInput
+					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					placeholder="105"
+					keyboardType="numeric"
+					onChangeText={(newValue) => setChemistryEnd(+newValue)}
+				></TextInput>
+			</View>
 
-			<Button title="Submit" onPress={() => handleSubmit()} />
+			<Pressable
+				onPress={() => handleSubmit()}
+				className="bg-accent mt-3 p-3 w-full rounded-xl"
+			>
+				<Text className="text-background text-xl text-center">
+					Submit
+				</Text>
+			</Pressable>
 
-			<Text className="text-red-600">{error}</Text>
+			<Text className="[color:#ff2056] text-xl">{error}</Text>
 		</View>
 	)
 }

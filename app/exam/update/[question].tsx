@@ -29,8 +29,20 @@ export default function Exam() {
 			"INSERT INTO questions (number, status, subject, topic, exam) VALUES (?,?,?,?,?)",
 			Object.values(questionData)
 		)
-		if (examInfo && nextQuestionNumber > examInfo?.size) {
-			router.replace("/")
+		if (examInfo && examInfo.status === "CREATED") {
+			await db.runAsync(
+				"UPDATE exams SET status = ? WHERE id = ?",
+				"IN-PROGRESS",
+				exam
+			)
+		}
+		if (examInfo && nextQuestionNumber > examInfo.size) {
+			await db.runAsync(
+				"UPDATE exams SET status = ? WHERE id = ?",
+				"COMPLETED",
+				exam
+			)
+			router.replace(`/exam/preview/${exam}`)
 		} else {
 			router.replace(`/exam/update/${nextQuestionNumber}?exam=${exam}`)
 		}

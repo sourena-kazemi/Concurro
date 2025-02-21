@@ -1,7 +1,7 @@
-import { Text, View } from "react-native"
+import { Pressable, Text, View } from "react-native"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
-import { Link, useFocusEffect } from "expo-router"
+import { Link, router, useFocusEffect } from "expo-router"
 import { examInfo, examPreview } from "@/types/types"
 
 export default function Index() {
@@ -16,8 +16,12 @@ export default function Index() {
 			previewInfo.push({
 				id: exam.id,
 				name: exam.name,
-				size: exam.size,
-				status: exam.status,
+				status:
+					exam.status === "CREATED"
+						? "CREATED"
+						: exam.status === "COMPLETED"
+						? "COMPLETED"
+						: "IN-PROGRESS",
 			})
 		)
 		setExams(previewInfo)
@@ -30,15 +34,19 @@ export default function Index() {
 	)
 
 	return (
-		<View className="flex-1 justify-center items-center flex-col-reverse">
+		<View className="flex-1 flex-col-reverse bg-background w-full px-4 gap-3 justify-end py-20">
 			{exams.map((exam) => (
-				<Link href={`/exam/preview/${exam.id}`} key={exam.id}>
-					<View className="border rounded p-2">
-						<Text>{`${exam.id} ${exam.name}`}</Text>
-						<Text>{exam.size}</Text>
-						<Text>{exam.status}</Text>
+				<Pressable
+					onPress={() => router.navigate(`/exam/preview/${exam.id}`)}
+					className="bg-secondary rounded-xl p-4 w-full flex flex-row justify-between items-center"
+					key={exam.id}
+				>
+					<View className="flex flex-row gap-4 items-center">
+						<Text className="text-text text-3xl">{`${exam.id}`}</Text>
+						<Text className="text-text text-xl">{`${exam.name}`}</Text>
 					</View>
-				</Link>
+					<Text className="text-background ">{exam.status}</Text>
+				</Pressable>
 			))}
 		</View>
 	)

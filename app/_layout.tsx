@@ -1,5 +1,7 @@
 import { Stack } from "expo-router/stack"
 import { SQLiteProvider, type SQLiteDatabase } from "expo-sqlite"
+import { StatusBar } from "expo-status-bar"
+import * as NavigationBar from "expo-navigation-bar"
 import "../global.css"
 
 export default function RootLayout() {
@@ -10,11 +12,19 @@ export default function RootLayout() {
 			`
 		)
 	}
+
+	NavigationBar.setBackgroundColorAsync("#1D2025")
+
 	return (
 		<SQLiteProvider databaseName="database.db" onInit={createDBIfNeeded}>
-			<Stack screenOptions={{ headerShown: false }}>
+			<Stack
+				screenOptions={{
+					headerShown: false,
+				}}
+			>
 				<Stack.Screen name="(tabs)" />
 			</Stack>
+			<StatusBar backgroundColor="#278262" />
 		</SQLiteProvider>
 	)
 }

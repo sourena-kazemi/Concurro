@@ -10,7 +10,12 @@ export default function TabLayout() {
 			screenOptions={{
 				headerShown: false,
 				tabBarShowLabel: false,
-				tabBarActiveTintColor: "blue",
+				tabBarLabelPosition: "beside-icon",
+				tabBarActiveTintColor: "#31d39a",
+				tabBarStyle: {
+					backgroundColor: "#1D2025",
+					borderTopWidth: 0,
+				},
 				animation: "shift",
 			}}
 		>
@@ -21,7 +26,7 @@ export default function TabLayout() {
 					tabBarIcon: ({ color, focused }) => (
 						<Icon
 							name="house"
-							color={focused ? color : "#000000"}
+							color={focused ? color : "#e4ece9"}
 						/>
 					),
 				}}
@@ -31,7 +36,7 @@ export default function TabLayout() {
 				options={{
 					title: "Add",
 					tabBarIcon: ({ color, focused }) => (
-						<Icon name="plus" color={focused ? color : "#000000"} />
+						<Icon name="plus" color={focused ? color : "#e4ece9"} />
 					),
 				}}
 			/>
@@ -42,7 +47,7 @@ export default function TabLayout() {
 					tabBarIcon: ({ color, focused }) => (
 						<Icon
 							name="chart"
-							color={focused ? color : "#000000"}
+							color={focused ? color : "#e4ece9"}
 						/>
 					),
 				}}

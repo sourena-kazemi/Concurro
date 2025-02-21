@@ -1,6 +1,7 @@
 import { topics } from "@/constants/topics"
 
 export type examStatus = "CREATED" | "IN-PROGRESS" | "COMPLETED"
+type examStatusPreview = "CREATED" | "IN-PROGRESS" | "COMPLETED"
 
 export type examInfo = {
 	id: number
@@ -25,7 +26,9 @@ export type examPreview = Omit<
 	| "physicsEnd"
 	| "chemistryStart"
 	| "chemistryEnd"
->
+	| "size"
+	| "status"
+> & { status: examStatusPreview }
 
 export type questionStatus = "CORRECT" | "WRONG" | "UNANSWERED"
 
