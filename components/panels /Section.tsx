@@ -4,11 +4,13 @@ import { View, Text, Pressable } from "react-native"
 
 type props = {
 	section: section
+	subjectHandler?: () => void
 	topicHandler: React.Dispatch<React.SetStateAction<string>>
 	topicSelectedHandler: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function Section({
 	section,
+	subjectHandler,
 	topicHandler,
 	topicSelectedHandler,
 }: props) {
@@ -20,6 +22,9 @@ export default function Section({
 					onPress={() => {
 						topicHandler(topic)
 						topicSelectedHandler(true)
+						if (subjectHandler) {
+							subjectHandler()
+						}
 					}}
 				>
 					<Text>{topics[topic]}</Text>

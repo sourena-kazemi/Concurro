@@ -5,7 +5,7 @@ import {
 	type questionStatus,
 } from "@/types/types"
 import { useEffect, useState } from "react"
-import TopicList from "./TopicSelector"
+import TopicSelector from "./TopicSelector"
 import { View, Text } from "react-native"
 import StatusSelector from "./StatusSelector"
 
@@ -56,7 +56,7 @@ export default function PhysicsPanel({
 					storeHandler={callStoreHandler}
 				/>
 			) : (
-				<TopicList
+				<TopicSelector
 					layout={physicsLayout}
 					tabHandler={setCurrentTab}
 					sections={sections}

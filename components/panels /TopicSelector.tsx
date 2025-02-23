@@ -8,14 +8,16 @@ type props = {
 	layout: layout
 	tabHandler: React.Dispatch<React.SetStateAction<string>>
 	sections: section[]
+	subjectHandler?: () => void
 	topicHandler: React.Dispatch<React.SetStateAction<string>>
 	topicChosenHandler: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function TopicList({
+export default function TopicSelector({
 	layout,
 	tabHandler,
 	sections,
+	subjectHandler,
 	topicHandler,
 	topicChosenHandler,
 }: props) {
@@ -28,6 +30,7 @@ export default function TopicList({
 				{sections.map((section, index) => (
 					<Section
 						section={section}
+						subjectHandler={subjectHandler}
 						topicHandler={topicHandler}
 						topicSelectedHandler={setIsTopicSelected}
 						key={index}

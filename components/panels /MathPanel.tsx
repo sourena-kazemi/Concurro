@@ -5,7 +5,7 @@ import {
 	type section,
 } from "@/types/types"
 import { useEffect, useState } from "react"
-import TopicList from "./TopicSelector"
+import TopicSelector from "./TopicSelector"
 import { View, Text } from "react-native"
 import StatusSelector from "./StatusSelector"
 
@@ -21,6 +21,7 @@ export default function MathPanel({
 	examId,
 }: props) {
 	const [currentTab, setCurrentTab] = useState("calculus")
+	const [subject, setSubject] = useState("calculus")
 	const [sections, setSections] = useState<section[]>(mathLayout[0].sections)
 	const [topic, setTopic] = useState("")
 	const [isTopicChosen, setIsTopicChosen] = useState(false)
@@ -31,12 +32,16 @@ export default function MathPanel({
 			number: +questionNumber,
 			status,
 			// @ts-ignore
-			subject: currentTab.toUpperCase(),
+			subject: subject.toUpperCase(),
 			// @ts-ignore
 			topic,
 			examId: +examId,
 		}
 		storeHandler(questionData)
+	}
+
+	const updateSubject = () => {
+		setSubject(currentTab)
 	}
 
 	useEffect(() => {
@@ -55,10 +60,11 @@ export default function MathPanel({
 					storeHandler={callStoreHandler}
 				/>
 			) : (
-				<TopicList
+				<TopicSelector
 					layout={mathLayout}
 					tabHandler={setCurrentTab}
 					sections={sections}
+					subjectHandler={updateSubject}
 					topicHandler={setTopic}
 					topicChosenHandler={setIsTopicChosen}
 				/>

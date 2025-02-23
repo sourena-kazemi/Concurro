@@ -1,4 +1,4 @@
-import { Button, Text, View } from "react-native"
+import { Text, View, Pressable } from "react-native"
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { type examInfo, type questionInfo } from "@/types/types"
@@ -41,21 +41,28 @@ export default function Exam() {
 	)
 
 	return (
-		<View className="flex-1 justify-center items-center">
-			<Text>Exam : {examInfo?.name}</Text>
-			<Text>Status : {examInfo?.status}</Text>
-			<Text>
-				{examInfo?.size} Questions, {lastQuestion} set
-			</Text>
-			<Button
-				title="Update"
+		<View className="flex-1 justify-center items-center bg-background px-4 gap-6">
+			<Text className="text-text text-3xl">{examInfo?.name}</Text>
+			<View className="flex flex-row gap-3">
+				<Text className="text-text text-xl">
+					<Text className="text-accent">{examInfo?.size}</Text>{" "}
+					Questions,{" "}
+					<Text className="text-accent">{lastQuestion}</Text> set
+				</Text>
+			</View>
+			<Pressable
 				onPress={() => {
 					router.navigate(
 						`/exam/update/${lastQuestion + 1}?exam=${id}`
 					)
 				}}
 				disabled={examInfo?.status === "COMPLETED"}
-			/>
+				className="bg-accent rounded-xl p-3 w-full"
+			>
+				<Text className="text-background text-center text-xl">
+					Update
+				</Text>
+			</Pressable>
 		</View>
 	)
 }
