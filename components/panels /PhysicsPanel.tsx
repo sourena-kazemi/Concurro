@@ -49,7 +49,7 @@ export default function PhysicsPanel({
 	}, [currentTab])
 
 	return (
-		<View>
+		<View className="w-full">
 			{isTopicChosen ? (
 				<StatusSelector
 					statusHandler={setStatus}
@@ -59,8 +59,10 @@ export default function PhysicsPanel({
 				<TopicSelector
 					layout={physicsLayout}
 					tabHandler={setCurrentTab}
+					tab={currentTab}
 					sections={sections}
 					topicHandler={setTopic}
+					topic={topic}
 					topicChosenHandler={setIsTopicChosen}
 				/>
 			)}

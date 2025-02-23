@@ -1,4 +1,4 @@
-import { Button, Text, View } from "react-native"
+import { ScrollView, Text, View } from "react-native"
 import { useFocusEffect, useLocalSearchParams, router } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import {
@@ -87,30 +87,32 @@ export default function Exam() {
 		}, [])
 	)
 	return (
-		<View className="flex-1 justify-center items-center">
-			<Text>Question {question}</Text>
-			<Text>{previewSubject}</Text>
-			{previewSubject === "MATHEMATICS" && (
-				<MathPanel
-					storeHandler={storeQuestionInDB}
-					questionNumber={question}
-					examId={exam}
-				/>
-			)}
-			{previewSubject === "PHYSICS" && (
-				<PhysicsPanel
-					storeHandler={storeQuestionInDB}
-					questionNumber={question}
-					examId={exam}
-				/>
-			)}
-			{previewSubject === "CHEMISTRY" && (
-				<ChemistryPanel
-					storeHandler={storeQuestionInDB}
-					questionNumber={question}
-					examId={exam}
-				/>
-			)}
-		</View>
+		<ScrollView>
+			<View className="flex1 bg-background px-4 py-20 justify-center items-center gap-6">
+				<Text className="text-text text-6xl">{question}</Text>
+				<Text className="text-text text-xl">{previewSubject}</Text>
+				{previewSubject === "MATHEMATICS" && (
+					<MathPanel
+						storeHandler={storeQuestionInDB}
+						questionNumber={question}
+						examId={exam}
+					/>
+				)}
+				{previewSubject === "PHYSICS" && (
+					<PhysicsPanel
+						storeHandler={storeQuestionInDB}
+						questionNumber={question}
+						examId={exam}
+					/>
+				)}
+				{previewSubject === "CHEMISTRY" && (
+					<ChemistryPanel
+						storeHandler={storeQuestionInDB}
+						questionNumber={question}
+						examId={exam}
+					/>
+				)}
+			</View>
+		</ScrollView>
 	)
 }

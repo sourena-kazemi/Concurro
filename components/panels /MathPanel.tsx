@@ -53,7 +53,7 @@ export default function MathPanel({
 	}, [currentTab])
 
 	return (
-		<View>
+		<View className="w-full">
 			{isTopicChosen ? (
 				<StatusSelector
 					statusHandler={setStatus}
@@ -63,9 +63,11 @@ export default function MathPanel({
 				<TopicSelector
 					layout={mathLayout}
 					tabHandler={setCurrentTab}
+					tab={currentTab}
 					sections={sections}
 					subjectHandler={updateSubject}
 					topicHandler={setTopic}
+					topic={topic}
 					topicChosenHandler={setIsTopicChosen}
 				/>
 			)}
