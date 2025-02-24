@@ -9,16 +9,24 @@ type props = {
 }
 export default function TabBar({ layout, tabHandler, tab: currentTab }: props) {
 	return (
-		<View className="flex-row gap-3 w-full flex ">
+		<View className="flex flex-row gap-3 w-full items-center">
 			{layout.map((tab, index) => (
 				<Pressable
 					key={index}
 					onPress={() => tabHandler(tab.name)}
-					className={`rounded-xl flex-grow ${
-						currentTab === tab.name ? "bg-text" : "bg-primary"
+					className={`rounded-xl flex flex-grow p-1 ${
+						currentTab === tab.name
+							? "bg-background border-2 border-primary"
+							: "bg-primary"
 					}`}
 				>
-					<Text className="text-center text-xl p-1">
+					<Text
+						className={`text-center text-xl ${
+							currentTab === tab.name
+								? "text-primary"
+								: "text-background"
+						}`}
+					>
 						{tab.previewName}
 					</Text>
 				</Pressable>
