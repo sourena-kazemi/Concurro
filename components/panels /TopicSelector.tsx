@@ -45,9 +45,8 @@ export default function TopicSelector({
 			<Pressable
 				disabled={!isTopicSelected}
 				onPress={() => topicChosenHandler(true)}
-				className={`p-3 rounded-xl bg-accent ${
-					!isTopicSelected && "bg-text opacity-50"
-				}`}
+				className={`p-3 rounded-xl
+				${isTopicSelected ? "bg-accent" : "bg-text opacity-50"}`}
 			>
 				<Text className="text-center text-xl text-text">Next</Text>
 			</Pressable>
