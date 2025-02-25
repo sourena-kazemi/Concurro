@@ -3,6 +3,7 @@ import { router, useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { type examInfo, type questionInfo } from "@/types/types"
 import { useCallback, useState } from "react"
+import AnalyticsViewer from "@/components/AnalyticsViewer"
 
 export default function Exam() {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -40,6 +41,13 @@ export default function Exam() {
 		}, [])
 	)
 
+	if (examInfo && examInfo.status === "COMPLETED") {
+		return (
+			<View className="flex-1 justify-center items-center bg-background px-4 gap-6">
+				<AnalyticsViewer examId={id} />
+			</View>
+		)
+	}
 	return (
 		<View className="flex-1 justify-center items-center bg-background px-4 gap-6">
 			<Text className="text-text text-3xl">{examInfo?.name}</Text>
@@ -57,7 +65,11 @@ export default function Exam() {
 					)
 				}}
 				disabled={examInfo?.status === "COMPLETED"}
-				className="bg-accent rounded-xl p-3 w-full"
+				className={`rounded-xl p-3 w-full ${
+					examInfo?.status === "COMPLETED"
+						? "bg-text opacity-50"
+						: "bg-accent"
+				}`}
 			>
 				<Text className="text-background text-center text-xl">
 					Update

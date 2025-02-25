@@ -6,16 +6,16 @@ import { examDBInfo } from "@/types/types"
 
 export default function AddExam() {
 	const [name, setName] = useState("")
-	const [size, setSize] = useState(105)
+	const [size, setSize] = useState(0)
 
-	const [mathStart, setMathStart] = useState(1)
-	const [mathEnd, setMathEnd] = useState(40)
+	const [mathStart, setMathStart] = useState(0)
+	const [mathEnd, setMathEnd] = useState(0)
 
-	const [physicsStart, setPhysicsStart] = useState(41)
-	const [physicsEnd, setPhysicsEnd] = useState(75)
+	const [physicsStart, setPhysicsStart] = useState(0)
+	const [physicsEnd, setPhysicsEnd] = useState(0)
 
-	const [chemistryStart, setChemistryStart] = useState(76)
-	const [chemistryEnd, setChemistryEnd] = useState(105)
+	const [chemistryStart, setChemistryStart] = useState(0)
+	const [chemistryEnd, setChemistryEnd] = useState(0)
 
 	const [error, setError] = useState("")
 
@@ -95,13 +95,13 @@ export default function AddExam() {
 		<View className="flex-1 items-center bg-background w-full gap-3 px-4 py-20 ">
 			<Text className="text-text text-3xl">Add Exam</Text>
 			<TextInput
-				className="text-background placeholder:text-background bg-primary rounded-xl w-full p-3"
+				className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl w-full p-3"
 				placeholder="Name of the exam"
 				onChangeText={(newText) => setName(newText)}
 			/>
 			<Text className="text-text text-xl mt-3">Number of questions</Text>
 			<TextInput
-				className="text-background placeholder:text-background bg-primary rounded-xl w-full p-3"
+				className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl w-full p-3"
 				placeholder="105"
 				keyboardType="numeric"
 				onChangeText={(newValue) => setSize(+newValue)}
@@ -110,13 +110,13 @@ export default function AddExam() {
 			<Text className="text-text text-xl mt-3">Mathematics Range</Text>
 			<View className="flex flex-row w-full gap-3">
 				<TextInput
-					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
 					placeholder="1"
 					keyboardType="numeric"
 					onChangeText={(newValue) => setMathStart(+newValue)}
 				></TextInput>
 				<TextInput
-					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
 					placeholder="40"
 					keyboardType="numeric"
 					onChangeText={(newValue) => setMathEnd(+newValue)}
@@ -126,13 +126,13 @@ export default function AddExam() {
 			<Text className="text-text text-xl mt-3">Physics Range</Text>
 			<View className="flex flex-row w-full gap-3">
 				<TextInput
-					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
 					placeholder="41"
 					keyboardType="numeric"
 					onChangeText={(newValue) => setPhysicsStart(+newValue)}
 				></TextInput>
 				<TextInput
-					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
 					placeholder="75"
 					keyboardType="numeric"
 					onChangeText={(newValue) => setPhysicsEnd(+newValue)}
@@ -142,13 +142,13 @@ export default function AddExam() {
 			<Text className="text-text text-xl mt-3">Chemistry Range</Text>
 			<View className="flex flex-row w-full gap-3">
 				<TextInput
-					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
 					placeholder="76"
 					keyboardType="numeric"
 					onChangeText={(newValue) => setChemistryStart(+newValue)}
 				></TextInput>
 				<TextInput
-					className="text-background placeholder:text-background bg-primary rounded-xl p-3 flex-grow"
+					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
 					placeholder="105"
 					keyboardType="numeric"
 					onChangeText={(newValue) => setChemistryEnd(+newValue)}

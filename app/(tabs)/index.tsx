@@ -1,4 +1,4 @@
-import { Pressable, Text, View } from "react-native"
+import { Pressable, ScrollView, Text, View } from "react-native"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
 import { Link, router, useFocusEffect } from "expo-router"
@@ -34,20 +34,24 @@ export default function Index() {
 	)
 
 	return (
-		<View className="flex-1 flex-col-reverse bg-background w-full px-4 gap-3 justify-end py-20">
-			{exams.map((exam) => (
-				<Pressable
-					onPress={() => router.navigate(`/exam/preview/${exam.id}`)}
-					className="bg-secondary rounded-xl p-4 w-full flex flex-row justify-between items-center"
-					key={exam.id}
-				>
-					<View className="flex flex-row gap-4 items-center">
-						<Text className="text-text text-3xl">{`${exam.id}`}</Text>
-						<Text className="text-text text-xl">{`${exam.name}`}</Text>
-					</View>
-					<Text className="text-background ">{exam.status}</Text>
-				</Pressable>
-			))}
-		</View>
+		<ScrollView>
+			<View className="flex-1 flex-col-reverse bg-background w-full px-4 gap-3 justify-end py-20">
+				{exams.map((exam) => (
+					<Pressable
+						onPress={() =>
+							router.navigate(`/exam/preview/${exam.id}`)
+						}
+						className="bg-secondary rounded-xl p-4 w-full flex flex-row justify-between items-center"
+						key={exam.id}
+					>
+						<View className="flex flex-row gap-4 items-center">
+							<Text className="text-text text-3xl">{`${exam.id}`}</Text>
+							<Text className="text-text text-xl">{`${exam.name}`}</Text>
+						</View>
+						<Text className="text-background">{exam.status}</Text>
+					</Pressable>
+				))}
+			</View>
+		</ScrollView>
 	)
 }

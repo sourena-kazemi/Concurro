@@ -49,7 +49,7 @@ export type questionInfo = {
 	status: questionStatus
 	subject: subject
 	topic: topic
-	examId: number
+	exam: number
 }
 
 export type section = topic[]
