@@ -3,7 +3,7 @@ import { router, useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { type examInfo, type questionInfo } from "@/types/types"
 import { useCallback, useState } from "react"
-import AnalyticsViewer from "@/components/AnalyticsViewer"
+import AnalyticsViewer from "@/components/analytics/AnalyticsViewer"
 
 export default function Exam() {
 	const { id } = useLocalSearchParams<{ id: string }>()
