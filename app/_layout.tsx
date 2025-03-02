@@ -24,7 +24,7 @@ export default function RootLayout() {
 			>
 				<Stack.Screen name="(tabs)" />
 			</Stack>
-			<StatusBar backgroundColor="#278262" />
+			<StatusBar backgroundColor="#1D2025" />
 		</SQLiteProvider>
 	)
 }

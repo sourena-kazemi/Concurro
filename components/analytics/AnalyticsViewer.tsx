@@ -1,8 +1,14 @@
-import { type subject, type examInfo, type questionInfo } from "@/types/types"
+import {
+	type subject,
+	type examInfo,
+	type questionInfo,
+	type topic,
+} from "@/types/types"
+import { chemistryLayout } from "@/constants/layouts"
 import { useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
-import { View, Text } from "react-native"
+import { View, Text, ScrollView } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 
 type props = {
@@ -28,11 +34,46 @@ export default function AnalyticsViewer({ examId }: props) {
 		{}
 	)
 
-	const sortQuestions = (questions: questionInfo[]) => {
+	const sortQuestions = (questions: questionInfo[], exams: exam) => {
 		const questionsBySubject: sortedQuestions = {}
 		const questionsByTopic: sortedQuestions = {}
 
+		const chemistryMemorizationTopics: topic[] = []
+		const chemistryCalculationTopics: topic[] = []
+
+		chemistryLayout[0].sections.map((section) =>
+			chemistryMemorizationTopics.push(...section)
+		)
+		chemistryLayout[1].sections.map((section) =>
+			chemistryCalculationTopics.push(...section)
+		)
+
 		questions.map((question) => {
+			const check = (array: {
+				[key: string]: {
+					name: string
+					id: number
+					questions: questionInfo[]
+				}
+			}) => {
+				if (!array) {
+					array = {}
+				}
+				if (!array[question.exam]) {
+					array[question.exam] = {
+						name: exams[question.exam],
+						id: question.exam,
+						questions: [],
+					}
+				}
+			}
+
+			check(questionsBySubject[question.subject])
+			check(questionsBySubject["MATHEMATICS"])
+			check(questionsBySubject["CHEMISTRY_MEMO"])
+			check(questionsBySubject["CHEMISTRY_CALC"])
+			check(questionsByTopic[question.topic])
+
 			questionsBySubject[question.subject][question.exam].questions.push(
 				question
 			)
@@ -51,58 +92,112 @@ export default function AnalyticsViewer({ examId }: props) {
 					question
 				)
 			}
+
+			if (chemistryMemorizationTopics.includes(question.topic)) {
+				questionsBySubject["CHEMISTRY_MEMO"][
+					question.exam
+				].questions.push(question)
+			}
+			if (chemistryCalculationTopics.includes(question.topic)) {
+				questionsBySubject["CHEMISTRY_CALC"][
+					question.exam
+				].questions.push(question)
+			}
 		})
 		setQuestionsBySubject(questionsBySubject)
 		setQuestionsByTopic(questionsByTopic)
 	}
 
-	const fetchExam = async () => {
-		const result = await db.getFirstSync<examInfo>(
+	const fetchExamData = async () => {
+		const examResult = await db.getFirstSync<examInfo>(
 			"SELECT * FROM exams WHERE id = ?",
 			examId
 		)
-		if (result) {
-			setExams({ [result.id]: result.name })
-		}
-	}
-	const fetchAllExams = async () => {
-		const result = await db.getAllAsync<examInfo>("SELECT * FROM exams")
-		const exams: exam = {}
-		result.map((exam) => (exams[exam.id] = exam.name))
-		setExams(exams)
-	}
-
-	const fetchExamQuestions = async () => {
-		const result = await db.getAllAsync<questionInfo>(
+		const questionsResult = await db.getAllAsync<questionInfo>(
 			"SELECT * FROM questions WHERE exam = ?",
 			examId
 		)
-		setQuestions(result)
-		sortQuestions(result)
+
+		if (examResult) {
+			setQuestions(questionsResult)
+			setExams({ [examResult.id]: examResult.name })
+			sortQuestions(questionsResult, { [examResult.id]: examResult.name })
+		}
 	}
-	const fetchAllQuestions = async () => {
-		const result = await db.getAllAsync<questionInfo>(
+
+	const fetchAllExamsData = async () => {
+		const examsResult = await db.getAllAsync<examInfo>(
+			"SELECT * FROM exams"
+		)
+		const exams: exam = {}
+		examsResult.map((exam) => (exams[exam.id] = exam.name))
+		const questionsResult = await db.getAllAsync<questionInfo>(
 			"SELECT * FROM questions"
 		)
-		setQuestions(result)
-		sortQuestions(result)
+
+		setExams(exams)
+		setQuestions(questionsResult)
+		sortQuestions(questionsResult, exams)
 	}
 
 	useFocusEffect(
 		useCallback(() => {
 			if (examId !== "*") {
-				fetchExam()
-				fetchExamQuestions()
+				fetchExamData()
 			} else {
-				fetchAllExams()
-				fetchAllQuestions()
+				fetchAllExamsData()
 			}
 		}, [examId])
 	)
 
 	return (
-		<View>
-			<AnalyticsBox questionsByExam={questionsBySubject["MATHEMATICS"]} />
-		</View>
+		<ScrollView>
+			<View className="w-full gap-6 py-20">
+				<AnalyticsBox
+					questionsByExam={questionsBySubject["MATHEMATICS"] || {}}
+					title="MATHEMATICS"
+				/>
+				<AnalyticsBox
+					questionsByExam={questionsBySubject["PHYSICS"] || {}}
+					title="PHYSICS"
+				/>
+				<AnalyticsBox
+					questionsByExam={questionsBySubject["CHEMISTRY"] || {}}
+					title="CHEMISTRY"
+				/>
+				<View className="gap-6 mt-6">
+					<AnalyticsBox
+						questionsByExam={questionsBySubject["CALCULUS"] || {}}
+						title="CALCULUS"
+					/>
+					<AnalyticsBox
+						questionsByExam={questionsBySubject["GEOMETRY"] || {}}
+						title="GEOMETRY"
+					/>
+					<AnalyticsBox
+						questionsByExam={questionsBySubject["DISCRETE"] || {}}
+						title="DISCRETE"
+					/>
+					<AnalyticsBox
+						questionsByExam={questionsBySubject["STATISTICS"] || {}}
+						title="STATISTICS"
+					/>
+				</View>
+				<View className="gap-6 mt-6">
+					<AnalyticsBox
+						questionsByExam={
+							questionsBySubject["CHEMISTRY_MEMO"] || {}
+						}
+						title="CHEMISTRY_MEMO"
+					/>
+					<AnalyticsBox
+						questionsByExam={
+							questionsBySubject["CHEMISTRY_CACL"] || {}
+						}
+						title="CHEMISTRY_CALC"
+					/>
+				</View>
+			</View>
+		</ScrollView>
 	)
 }

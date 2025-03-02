@@ -43,7 +43,7 @@ export default function Exam() {
 
 	if (examInfo && examInfo.status === "COMPLETED") {
 		return (
-			<View className="flex-1 justify-center items-center bg-background px-4 gap-6">
+			<View className="flex-1 w-full bg-background px-4 ">
 				<AnalyticsViewer examId={id} />
 			</View>
 		)

@@ -1,5 +1,6 @@
 import { type questionInfo } from "@/types/types"
-import { useState } from "react"
+import { useFocusEffect } from "expo-router"
+import { useCallback, useState } from "react"
 import { View, Text } from "react-native"
 
 type questionsByExam = {
@@ -12,6 +13,7 @@ type questions = {
 }
 type props = {
 	questionsByExam: questionsByExam
+	title: string
 }
 type percentage = {
 	name: string
@@ -19,15 +21,35 @@ type percentage = {
 	percentage: number
 }
 
-export default function AnalyticsBox({ questionsByExam }: props) {
+export default function AnalyticsBox({ questionsByExam, title }: props) {
 	const [percentages, setPercentages] = useState<percentage[]>([])
+	const [averagePercentage, setAveragePercentage] = useState(0)
 	const [wrongQuestions, setWrongQuestions] = useState<questions[]>([])
 
 	const [questionsCount, setQuestionsCount] = useState(0)
 	const [correctQuestionsCount, setCorrectQuestionsCount] = useState(0)
 	const [wrongQuestionsCount, setWrongQuestionsCount] = useState(0)
 
+	const [isSingleExam, setIsSingleExam] = useState(true)
+
 	const analyzeExams = () => {
+		setPercentages([])
+		setAveragePercentage(0)
+		setWrongQuestions([])
+		setQuestionsCount(0)
+		setCorrectQuestionsCount(0)
+		setWrongQuestionsCount(0)
+
+		let questionsCount = 0
+		let correctQuestionsCount = 0
+		let wrongQuestionsCount = 0
+
+		const percentages: percentage[] = []
+		let percentageSum = 0
+		const wrongQuestions: questions[] = []
+
+		setIsSingleExam(true)
+
 		for (const [examId, examInfo] of Object.entries(questionsByExam)) {
 			let examQuestionsCount = 0
 			let examCorrectQuestionsCount = 0
@@ -39,40 +61,79 @@ export default function AnalyticsBox({ questionsByExam }: props) {
 			}
 			examInfo.questions.map((question) => {
 				examQuestionsCount += 1
-				setQuestionsCount((prev) => prev + 1)
+				questionsCount += 1
 				switch (question.status) {
 					case "CORRECT":
 						examCorrectQuestionsCount += 1
-						setCorrectQuestionsCount((prev) => prev + 1)
+						correctQuestionsCount += 1
+						break
 					case "WRONG":
 						examWrongQuestionsCount += 1
+						wrongQuestionsCount += 1
 						examWrongQuestions.questions.push(question)
-						setWrongQuestionsCount((prev) => prev + 1)
+						break
 				}
 			})
 			const examPercentage =
 				((examCorrectQuestionsCount * 3 - examWrongQuestionsCount) /
 					(examQuestionsCount * 3)) *
 				100
-			setPercentages([
-				...percentages,
-				{
-					name: examInfo.name,
-					id: examInfo.id,
-					percentage: examPercentage,
-				},
-			])
-			setWrongQuestions([...wrongQuestions, examWrongQuestions])
+			percentages.push({
+				name: examInfo.name,
+				id: examInfo.id,
+				percentage: Math.floor(examPercentage),
+			})
+			percentageSum += Math.floor(examPercentage)
+			wrongQuestions.push(examWrongQuestions)
+		}
+
+		setQuestionsCount(questionsCount)
+		setCorrectQuestionsCount(correctQuestionsCount)
+		setWrongQuestionsCount(wrongQuestionsCount)
+		setPercentages(percentages)
+		setAveragePercentage(Math.floor(percentageSum / percentages.length))
+		setWrongQuestions(wrongQuestions)
+		if (percentages.length > 1) {
+			setIsSingleExam(false)
 		}
 	}
 
+	useFocusEffect(
+		useCallback(() => {
+			analyzeExams()
+		}, [questionsByExam])
+	)
+
 	return (
-		<View>
-			{percentages.map((exam) => (
-				<Text>
-					{exam.id} {exam.name} {exam.percentage}
+		<View className="bg-secondary rounded-xl p-4 w-full gap-4">
+			<View className="flex-row justify-between items-center">
+				<Text className="text-text text-2xl">{title}</Text>
+				<Text className="text-text text-xl">
+					{averagePercentage || 0}%
 				</Text>
-			))}
+			</View>
+			<View className="flex-row items-center justify-between gap-4">
+				<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+					<Text className="text-text">Correct</Text>
+					<Text className="text-accent text-xl">
+						{correctQuestionsCount}
+					</Text>
+				</View>
+				<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+					<Text className="text-text ">Wrong</Text>
+					<Text className="text-error text-xl">
+						{wrongQuestionsCount}
+					</Text>
+				</View>
+				<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+					<Text className="text-text ">Unanswered</Text>
+					<Text className="text-text text-xl">
+						{questionsCount -
+							correctQuestionsCount -
+							wrongQuestionsCount}
+					</Text>
+				</View>
+			</View>
 		</View>
 	)
 }

@@ -42,7 +42,7 @@ export type subject =
 
 export type previewSubject = "MATHEMATICS" | "PHYSICS" | "CHEMISTRY"
 
-type topic = keyof typeof topics
+export type topic = keyof typeof topics
 
 export type questionInfo = {
 	number: number

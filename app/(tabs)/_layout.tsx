@@ -22,7 +22,6 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="index"
 				options={{
-					title: "Home",
 					tabBarIcon: ({ color, focused }) => (
 						<Icon
 							name="house"
@@ -34,7 +33,6 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="addExam"
 				options={{
-					title: "Add",
 					tabBarIcon: ({ color, focused }) => (
 						<Icon name="plus" color={focused ? color : "#e4ece9"} />
 					),
@@ -43,7 +41,6 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="analytics"
 				options={{
-					title: "Analytics",
 					tabBarIcon: ({ color, focused }) => (
 						<Icon
 							name="chart"

@@ -13,6 +13,7 @@ module.exports = {
 			primary: "#96d4be",
 			secondary: "#278262",
 			accent: "#31d39a",
+			error: "#f43f5e",
 		},
 		extend: {},
 	},
