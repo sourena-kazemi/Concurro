@@ -11,17 +11,22 @@ type questions = {
 	id: number
 	questions: questionInfo[]
 }
-type props = {
-	questionsByExam: questionsByExam
-	title: string
-}
 type percentage = {
 	name: string
 	id: number
 	percentage: number
 }
+type props = {
+	questionsByExam: questionsByExam
+	title: string
+	variation?: "SMALL"
+}
 
-export default function AnalyticsBox({ questionsByExam, title }: props) {
+export default function AnalyticsBox({
+	questionsByExam,
+	title,
+	variation,
+}: props) {
 	const [percentages, setPercentages] = useState<percentage[]>([])
 	const [averagePercentage, setAveragePercentage] = useState(0)
 	const [wrongQuestions, setWrongQuestions] = useState<questions[]>([])
@@ -51,40 +56,42 @@ export default function AnalyticsBox({ questionsByExam, title }: props) {
 		setIsSingleExam(true)
 
 		for (const [examId, examInfo] of Object.entries(questionsByExam)) {
-			let examQuestionsCount = 0
-			let examCorrectQuestionsCount = 0
-			let examWrongQuestionsCount = 0
-			const examWrongQuestions: questions = {
-				name: examInfo.name,
-				id: examInfo.id,
-				questions: [],
-			}
-			examInfo.questions.map((question) => {
-				examQuestionsCount += 1
-				questionsCount += 1
-				switch (question.status) {
-					case "CORRECT":
-						examCorrectQuestionsCount += 1
-						correctQuestionsCount += 1
-						break
-					case "WRONG":
-						examWrongQuestionsCount += 1
-						wrongQuestionsCount += 1
-						examWrongQuestions.questions.push(question)
-						break
+			if (examInfo.questions.length > 0) {
+				let examQuestionsCount = 0
+				let examCorrectQuestionsCount = 0
+				let examWrongQuestionsCount = 0
+				const examWrongQuestions: questions = {
+					name: examInfo.name,
+					id: examInfo.id,
+					questions: [],
 				}
-			})
-			const examPercentage =
-				((examCorrectQuestionsCount * 3 - examWrongQuestionsCount) /
-					(examQuestionsCount * 3)) *
-				100
-			percentages.push({
-				name: examInfo.name,
-				id: examInfo.id,
-				percentage: Math.floor(examPercentage),
-			})
-			percentageSum += Math.floor(examPercentage)
-			wrongQuestions.push(examWrongQuestions)
+				examInfo.questions.map((question) => {
+					examQuestionsCount += 1
+					questionsCount += 1
+					switch (question.status) {
+						case "CORRECT":
+							examCorrectQuestionsCount += 1
+							correctQuestionsCount += 1
+							break
+						case "WRONG":
+							examWrongQuestionsCount += 1
+							wrongQuestionsCount += 1
+							examWrongQuestions.questions.push(question)
+							break
+					}
+				})
+				const examPercentage =
+					((examCorrectQuestionsCount * 3 - examWrongQuestionsCount) /
+						(examQuestionsCount * 3)) *
+					100
+				percentages.push({
+					name: examInfo.name,
+					id: examInfo.id,
+					percentage: Math.floor(examPercentage),
+				})
+				percentageSum += Math.floor(examPercentage)
+				wrongQuestions.push(examWrongQuestions)
+			}
 		}
 
 		setQuestionsCount(questionsCount)
@@ -105,35 +112,55 @@ export default function AnalyticsBox({ questionsByExam, title }: props) {
 	)
 
 	return (
-		<View className="bg-secondary rounded-xl p-4 w-full gap-4">
-			<View className="flex-row justify-between items-center">
-				<Text className="text-text text-2xl">{title}</Text>
-				<Text className="text-text text-xl">
+		<View
+			className={`rounded-xl p-4 grow flex-1 gap-4 ${
+				variation !== "SMALL" ? "bg-secondary" : "bg-primary"
+			}`}
+		>
+			<View
+				className={`justify-between items-center ${
+					variation !== "SMALL" ? "flex-row" : "flex-col gap-3"
+				}`}
+			>
+				<Text
+					className={`text-2xl font-bold ${
+						variation !== "SMALL" ? "text-text" : "text-background"
+					}`}
+				>
+					{title}
+				</Text>
+				<Text
+					className={`text-xl ${
+						variation !== "SMALL" ? "text-text" : "text-secondary"
+					}`}
+				>
 					{averagePercentage || 0}%
 				</Text>
 			</View>
-			<View className="flex-row items-center justify-between gap-4">
-				<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-					<Text className="text-text">Correct</Text>
-					<Text className="text-accent text-xl">
-						{correctQuestionsCount}
-					</Text>
+			{variation !== "SMALL" && (
+				<View className="flex-row items-center justify-between gap-4">
+					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+						<Text className="text-text">Correct</Text>
+						<Text className="text-accent text-xl">
+							{correctQuestionsCount}
+						</Text>
+					</View>
+					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+						<Text className="text-text ">Wrong</Text>
+						<Text className="text-error text-xl">
+							{wrongQuestionsCount}
+						</Text>
+					</View>
+					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+						<Text className="text-text ">Unanswered</Text>
+						<Text className="text-text text-xl">
+							{questionsCount -
+								correctQuestionsCount -
+								wrongQuestionsCount}
+						</Text>
+					</View>
 				</View>
-				<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-					<Text className="text-text ">Wrong</Text>
-					<Text className="text-error text-xl">
-						{wrongQuestionsCount}
-					</Text>
-				</View>
-				<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-					<Text className="text-text ">Unanswered</Text>
-					<Text className="text-text text-xl">
-						{questionsCount -
-							correctQuestionsCount -
-							wrongQuestionsCount}
-					</Text>
-				</View>
-			</View>
+			)}
 		</View>
 	)
 }

@@ -46,7 +46,7 @@ export default function Index() {
 					>
 						<View className="flex flex-row gap-4 items-center">
 							<Text className="text-text text-3xl">{`${exam.id}`}</Text>
-							<Text className="text-text text-xl">{`${exam.name}`}</Text>
+							<Text className="text-text text-xl font-bold">{`${exam.name}`}</Text>
 						</View>
 						<Text className="text-background">{exam.status}</Text>
 					</Pressable>

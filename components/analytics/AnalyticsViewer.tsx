@@ -49,30 +49,40 @@ export default function AnalyticsViewer({ examId }: props) {
 		)
 
 		questions.map((question) => {
-			const check = (array: {
+			const check = (object: {
 				[key: string]: {
 					name: string
 					id: number
 					questions: questionInfo[]
 				}
 			}) => {
-				if (!array) {
-					array = {}
+				if (!object) {
+					object = {}
 				}
-				if (!array[question.exam]) {
-					array[question.exam] = {
+				if (!object[question.exam]) {
+					object[question.exam] = {
 						name: exams[question.exam],
 						id: question.exam,
 						questions: [],
 					}
 				}
+				return object
 			}
-
-			check(questionsBySubject[question.subject])
-			check(questionsBySubject["MATHEMATICS"])
-			check(questionsBySubject["CHEMISTRY_MEMO"])
-			check(questionsBySubject["CHEMISTRY_CALC"])
-			check(questionsByTopic[question.topic])
+			questionsBySubject[question.subject] = check(
+				questionsBySubject[question.subject]
+			)
+			questionsBySubject["MATHEMATICS"] = check(
+				questionsBySubject["MATHEMATICS"]
+			)
+			questionsBySubject["CHEMISTRY_MEMO"] = check(
+				questionsBySubject["CHEMISTRY_MEMO"]
+			)
+			questionsBySubject["CHEMISTRY_CALC"] = check(
+				questionsBySubject["CHEMISTRY_CALC"]
+			)
+			questionsByTopic[question.topic] = check(
+				questionsByTopic[question.topic]
+			)
 
 			questionsBySubject[question.subject][question.exam].questions.push(
 				question
@@ -92,16 +102,17 @@ export default function AnalyticsViewer({ examId }: props) {
 					question
 				)
 			}
-
-			if (chemistryMemorizationTopics.includes(question.topic)) {
-				questionsBySubject["CHEMISTRY_MEMO"][
-					question.exam
-				].questions.push(question)
-			}
-			if (chemistryCalculationTopics.includes(question.topic)) {
-				questionsBySubject["CHEMISTRY_CALC"][
-					question.exam
-				].questions.push(question)
+			if (question.subject === "CHEMISTRY") {
+				if (chemistryMemorizationTopics.includes(question.topic)) {
+					questionsBySubject["CHEMISTRY_MEMO"][
+						question.exam
+					].questions.push(question)
+				}
+				if (chemistryCalculationTopics.includes(question.topic)) {
+					questionsBySubject["CHEMISTRY_CALC"][
+						question.exam
+					].questions.push(question)
+				}
 			}
 		})
 		setQuestionsBySubject(questionsBySubject)
@@ -165,36 +176,54 @@ export default function AnalyticsViewer({ examId }: props) {
 					questionsByExam={questionsBySubject["CHEMISTRY"] || {}}
 					title="CHEMISTRY"
 				/>
-				<View className="gap-6 mt-6">
-					<AnalyticsBox
-						questionsByExam={questionsBySubject["CALCULUS"] || {}}
-						title="CALCULUS"
-					/>
-					<AnalyticsBox
-						questionsByExam={questionsBySubject["GEOMETRY"] || {}}
-						title="GEOMETRY"
-					/>
-					<AnalyticsBox
-						questionsByExam={questionsBySubject["DISCRETE"] || {}}
-						title="DISCRETE"
-					/>
-					<AnalyticsBox
-						questionsByExam={questionsBySubject["STATISTICS"] || {}}
-						title="STATISTICS"
-					/>
+				<View className="gap-3 mt-6">
+					<View className="flex-row gap-3">
+						<AnalyticsBox
+							questionsByExam={
+								questionsBySubject["CALCULUS"] || {}
+							}
+							title="CALCULUS"
+							variation="SMALL"
+						/>
+						<AnalyticsBox
+							questionsByExam={
+								questionsBySubject["GEOMETRY"] || {}
+							}
+							title="GEOMETRY"
+							variation="SMALL"
+						/>
+					</View>
+					<View className="flex-row gap-3">
+						<AnalyticsBox
+							questionsByExam={
+								questionsBySubject["DISCRETE"] || {}
+							}
+							title="DISCRETE"
+							variation="SMALL"
+						/>
+						<AnalyticsBox
+							questionsByExam={
+								questionsBySubject["STATISTICS"] || {}
+							}
+							title="STATISTICS"
+							variation="SMALL"
+						/>
+					</View>
 				</View>
-				<View className="gap-6 mt-6">
+				<View className="gap-3 mt-6 flex-row">
 					<AnalyticsBox
 						questionsByExam={
 							questionsBySubject["CHEMISTRY_MEMO"] || {}
 						}
 						title="CHEMISTRY_MEMO"
+						variation="SMALL"
 					/>
 					<AnalyticsBox
 						questionsByExam={
-							questionsBySubject["CHEMISTRY_CACL"] || {}
+							questionsBySubject["CHEMISTRY_CALC"] || {}
 						}
 						title="CHEMISTRY_CALC"
+						variation="SMALL"
 					/>
 				</View>
 			</View>
