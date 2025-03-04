@@ -4,12 +4,13 @@ import {
 	type questionInfo,
 	type topic,
 } from "@/types/types"
-import { chemistryLayout } from "@/constants/layouts"
+import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
 import { useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
-import { View, Text, ScrollView } from "react-native"
+import { View, Text, ScrollView, Pressable } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
+import { topics } from "@/constants/topics"
 
 type props = {
 	examId: string
@@ -33,6 +34,9 @@ export default function AnalyticsViewer({ examId }: props) {
 	const [questionsByTopic, setQuestionsByTopic] = useState<sortedQuestions>(
 		{}
 	)
+
+	const [currentTab, setCurrentTab] = useState<subject>("CALCULUS")
+	const [subjectTopics, setSubjectTopics] = useState<topic[]>([])
 
 	const sortQuestions = (questions: questionInfo[], exams: exam) => {
 		const questionsBySubject: sortedQuestions = {}
@@ -160,9 +164,67 @@ export default function AnalyticsViewer({ examId }: props) {
 			}
 		}, [examId])
 	)
+	useFocusEffect(
+		useCallback(() => {
+			switch (currentTab) {
+				case "CALCULUS":
+					setSubjectTopics([
+						...mathLayout[0].sections.reduce(
+							(array, current) => [...array, ...current],
+							[]
+						),
+					])
+					break
+				case "GEOMETRY":
+					setSubjectTopics([
+						...mathLayout[2].sections.reduce(
+							(array, current) => [...array, ...current],
+							[]
+						),
+					])
+					break
+				case "DISCRETE":
+					setSubjectTopics([
+						...mathLayout[1].sections.reduce(
+							(array, current) => [...array, ...current],
+							[]
+						),
+					])
+					break
+				case "STATISTICS":
+					setSubjectTopics([
+						...mathLayout[3].sections.reduce(
+							(array, current) => [...array, ...current],
+							[]
+						),
+					])
+					break
+				case "PHYSICS":
+					setSubjectTopics([
+						...physicsLayout[0].sections[0],
+						...physicsLayout[1].sections[0],
+						...physicsLayout[2].sections[0],
+					])
+					break
+				case "CHEMISTRY":
+					setSubjectTopics([
+						...chemistryLayout[0].sections.reduce(
+							(array, current) => [...array, ...current],
+							[]
+						),
+						...chemistryLayout[1].sections.reduce(
+							(array, current) => [...array, ...current],
+							[]
+						),
+					])
+					break
+			}
+			console.log(subjectTopics)
+		}, [currentTab])
+	)
 
 	return (
-		<ScrollView>
+		<ScrollView showsVerticalScrollIndicator={false}>
 			<View className="w-full gap-6 py-20">
 				<AnalyticsBox
 					questionsByExam={questionsBySubject["MATHEMATICS"] || {}}
@@ -184,6 +246,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							}
 							title="CALCULUS"
 							variation="SMALL"
+							direction="COLUMN"
 						/>
 						<AnalyticsBox
 							questionsByExam={
@@ -191,6 +254,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							}
 							title="GEOMETRY"
 							variation="SMALL"
+							direction="COLUMN"
 						/>
 					</View>
 					<View className="flex-row gap-3">
@@ -200,6 +264,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							}
 							title="DISCRETE"
 							variation="SMALL"
+							direction="COLUMN"
 						/>
 						<AnalyticsBox
 							questionsByExam={
@@ -207,16 +272,18 @@ export default function AnalyticsViewer({ examId }: props) {
 							}
 							title="STATISTICS"
 							variation="SMALL"
+							direction="COLUMN"
 						/>
 					</View>
 				</View>
-				<View className="gap-3 mt-6 flex-row">
+				<View className="gap-3 mt-6">
 					<AnalyticsBox
 						questionsByExam={
 							questionsBySubject["CHEMISTRY_MEMO"] || {}
 						}
 						title="CHEMISTRY_MEMO"
 						variation="SMALL"
+						direction="ROW"
 					/>
 					<AnalyticsBox
 						questionsByExam={
@@ -224,7 +291,133 @@ export default function AnalyticsViewer({ examId }: props) {
 						}
 						title="CHEMISTRY_CALC"
 						variation="SMALL"
+						direction="ROW"
 					/>
+				</View>
+				<ScrollView
+					horizontal={true}
+					showsHorizontalScrollIndicator={false}
+				>
+					<View className="flex-row gap-3 mt-6">
+						<Pressable
+							className={`rounded-xl grow p-2 ${
+								currentTab === "CALCULUS"
+									? "bg-background border-2 border-primary"
+									: "bg-secondary"
+							}`}
+							onPress={() => setCurrentTab("CALCULUS")}
+						>
+							<Text
+								className={`text-center text-xl ${
+									currentTab === "CALCULUS"
+										? "text-primary"
+										: "text-text"
+								}`}
+							>
+								CALCULUS
+							</Text>
+						</Pressable>
+						<Pressable
+							className={`rounded-xl grow p-2 ${
+								currentTab === "GEOMETRY"
+									? "bg-background border-2 border-primary"
+									: "bg-secondary"
+							}`}
+							onPress={() => setCurrentTab("GEOMETRY")}
+						>
+							<Text
+								className={`text-center text-xl ${
+									currentTab === "GEOMETRY"
+										? "text-primary"
+										: "text-text"
+								}`}
+							>
+								GEOMETRY
+							</Text>
+						</Pressable>
+						<Pressable
+							className={`rounded-xl grow p-2 ${
+								currentTab === "DISCRETE"
+									? "bg-background border-2 border-primary"
+									: "bg-secondary"
+							}`}
+							onPress={() => setCurrentTab("DISCRETE")}
+						>
+							<Text
+								className={`text-center text-xl ${
+									currentTab === "DISCRETE"
+										? "text-primary"
+										: "text-text"
+								}`}
+							>
+								DISCRETE
+							</Text>
+						</Pressable>
+						<Pressable
+							className={`rounded-xl grow p-2 ${
+								currentTab === "STATISTICS"
+									? "bg-background border-2 border-primary"
+									: "bg-secondary"
+							}`}
+							onPress={() => setCurrentTab("STATISTICS")}
+						>
+							<Text
+								className={`text-center text-xl ${
+									currentTab === "STATISTICS"
+										? "text-primary"
+										: "text-text"
+								}`}
+							>
+								STATISTICS
+							</Text>
+						</Pressable>
+						<Pressable
+							className={`rounded-xl grow p-2 ${
+								currentTab === "PHYSICS"
+									? "bg-background border-2 border-primary"
+									: "bg-secondary"
+							}`}
+							onPress={() => setCurrentTab("PHYSICS")}
+						>
+							<Text
+								className={`text-center text-xl ${
+									currentTab === "PHYSICS"
+										? "text-primary"
+										: "text-text"
+								}`}
+							>
+								PHYSICS
+							</Text>
+						</Pressable>
+						<Pressable
+							className={`rounded-xl grow p-2 ${
+								currentTab === "CHEMISTRY"
+									? "bg-background border-2 border-primary"
+									: "bg-secondary"
+							}`}
+							onPress={() => setCurrentTab("CHEMISTRY")}
+						>
+							<Text
+								className={`text-center text-xl ${
+									currentTab === "CHEMISTRY"
+										? "text-primary"
+										: "text-text"
+								}`}
+							>
+								CHEMISTRY
+							</Text>
+						</Pressable>
+					</View>
+				</ScrollView>
+				<View className="gap-3">
+					{subjectTopics.map((topic) => (
+						<AnalyticsBox
+							questionsByExam={questionsByTopic[topic] || {}}
+							title={topics[topic]}
+							variation="SMALL"
+							direction="ROW"
+						/>
+					))}
 				</View>
 			</View>
 		</ScrollView>

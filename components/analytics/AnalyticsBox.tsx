@@ -16,16 +16,25 @@ type percentage = {
 	id: number
 	percentage: number
 }
-type props = {
-	questionsByExam: questionsByExam
-	title: string
-	variation?: "SMALL"
-}
+type props =
+	| {
+			questionsByExam: questionsByExam
+			title: string
+			variation?: never
+			direction?: never
+	  }
+	| {
+			questionsByExam: questionsByExam
+			title: string
+			variation: "SMALL"
+			direction: "COLUMN" | "ROW"
+	  }
 
 export default function AnalyticsBox({
 	questionsByExam,
 	title,
 	variation,
+	direction,
 }: props) {
 	const [percentages, setPercentages] = useState<percentage[]>([])
 	const [averagePercentage, setAveragePercentage] = useState(0)
@@ -119,7 +128,7 @@ export default function AnalyticsBox({
 		>
 			<View
 				className={`justify-between items-center ${
-					variation !== "SMALL" ? "flex-row" : "flex-col gap-3"
+					direction === "ROW" ? "flex-row" : "flex-col gap-3"
 				}`}
 			>
 				<Text
@@ -130,7 +139,7 @@ export default function AnalyticsBox({
 					{title}
 				</Text>
 				<Text
-					className={`text-xl ${
+					className={`text-xl font-bold ${
 						variation !== "SMALL" ? "text-text" : "text-secondary"
 					}`}
 				>
