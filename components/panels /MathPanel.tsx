@@ -57,7 +57,6 @@ export default function MathPanel({
 			{isTopicChosen ? (
 				<StatusSelector
 					statusHandler={setStatus}
-					status={status}
 					storeHandler={callStoreHandler}
 				/>
 			) : (

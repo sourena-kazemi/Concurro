@@ -1,25 +1,24 @@
-import { type questionInfo } from "@/types/types"
+import {
+	type questionInfo,
+	type percentage,
+	type questions,
+	type analyticsInfo,
+} from "@/types/types"
 import { useFocusEffect } from "expo-router"
 import { useCallback, useState } from "react"
-import { View, Text } from "react-native"
+import { View, Text, Pressable } from "react-native"
 
 type questionsByExam = {
 	[key: number]: { name: string; id: number; questions: questionInfo[] }
-}
-type questions = {
-	name: string
-	id: number
-	questions: questionInfo[]
-}
-type percentage = {
-	name: string
-	id: number
-	percentage: number
 }
 type props =
 	| {
 			questionsByExam: questionsByExam
 			title: string
+			handleAnalytics: React.Dispatch<
+				React.SetStateAction<analyticsInfo | undefined>
+			>
+			handleModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
 			background?: never
 			variation?: never
 			direction?: never
@@ -27,6 +26,10 @@ type props =
 	| {
 			questionsByExam: questionsByExam
 			title: string
+			handleAnalytics: React.Dispatch<
+				React.SetStateAction<analyticsInfo | undefined>
+			>
+			handleModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
 			background: "PRIMARY" | "SECONDARY"
 			variation: "SMALL"
 			direction: "COLUMN" | "ROW"
@@ -35,19 +38,22 @@ type props =
 export default function AnalyticsBox({
 	questionsByExam,
 	title,
+	handleAnalytics,
+	handleModalVisibility,
 	background = "SECONDARY",
 	variation,
 	direction,
 }: props) {
 	const [percentages, setPercentages] = useState<percentage[]>([])
 	const [averagePercentage, setAveragePercentage] = useState(0)
-	const [wrongQuestions, setWrongQuestions] = useState<questions[]>([])
+	const [reviewQuestions, setWrongQuestions] = useState<questions[]>([])
 
 	const [questionsCount, setQuestionsCount] = useState(0)
 	const [correctQuestionsCount, setCorrectQuestionsCount] = useState(0)
 	const [wrongQuestionsCount, setWrongQuestionsCount] = useState(0)
 
 	const [isSingleExam, setIsSingleExam] = useState(true)
+	const [isModalVisible, setIsModalVisible] = useState(false)
 
 	const analyzeExams = () => {
 		setPercentages([])
@@ -63,7 +69,7 @@ export default function AnalyticsBox({
 
 		const percentages: percentage[] = []
 		let percentageSum = 0
-		const wrongQuestions: questions[] = []
+		const reviewQuestions: questions[] = []
 
 		setIsSingleExam(true)
 
@@ -72,7 +78,7 @@ export default function AnalyticsBox({
 				let examQuestionsCount = 0
 				let examCorrectQuestionsCount = 0
 				let examWrongQuestionsCount = 0
-				const examWrongQuestions: questions = {
+				const examReviewQuestions: questions = {
 					name: examInfo.name,
 					id: examInfo.id,
 					questions: [],
@@ -88,7 +94,10 @@ export default function AnalyticsBox({
 						case "WRONG":
 							examWrongQuestionsCount += 1
 							wrongQuestionsCount += 1
-							examWrongQuestions.questions.push(question)
+							examReviewQuestions.questions.push(question)
+							break
+						case "UNANSWERED":
+							examReviewQuestions.questions.push(question)
 							break
 					}
 				})
@@ -102,7 +111,7 @@ export default function AnalyticsBox({
 					percentage: Math.floor(examPercentage),
 				})
 				percentageSum += Math.floor(examPercentage)
-				wrongQuestions.push(examWrongQuestions)
+				reviewQuestions.push(examReviewQuestions)
 			}
 		}
 
@@ -111,7 +120,7 @@ export default function AnalyticsBox({
 		setWrongQuestionsCount(wrongQuestionsCount)
 		setPercentages(percentages)
 		setAveragePercentage(Math.floor(percentageSum / percentages.length))
-		setWrongQuestions(wrongQuestions)
+		setWrongQuestions(reviewQuestions)
 		if (percentages.length > 1) {
 			setIsSingleExam(false)
 		}
@@ -124,7 +133,18 @@ export default function AnalyticsBox({
 	)
 
 	return (
-		<View
+		<Pressable
+			onPress={() => {
+				handleModalVisibility(true)
+				handleAnalytics({
+					questionsCount,
+					correctQuestionsCount,
+					wrongQuestionsCount,
+					percentages,
+					averagePercentage,
+					reviewQuestions,
+				})
+			}}
 			className={`rounded-xl p-4 grow flex-1 gap-4 ${
 				background === "SECONDARY" ? "bg-secondary" : "bg-primary"
 			}`}
@@ -150,7 +170,7 @@ export default function AnalyticsBox({
 							: "text-secondary"
 					}`}
 				>
-					{averagePercentage || 0}%
+					{percentages.length !== 0 ? averagePercentage : "-"}%
 				</Text>
 			</View>
 			{variation !== "SMALL" && (
@@ -177,6 +197,6 @@ export default function AnalyticsBox({
 					</View>
 				</View>
 			)}
-		</View>
+		</Pressable>
 	)
 }

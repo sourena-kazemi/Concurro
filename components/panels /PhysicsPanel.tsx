@@ -53,7 +53,6 @@ export default function PhysicsPanel({
 			{isTopicChosen ? (
 				<StatusSelector
 					statusHandler={setStatus}
-					status={status}
 					storeHandler={callStoreHandler}
 				/>
 			) : (

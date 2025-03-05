@@ -61,3 +61,24 @@ type tab = {
 }
 
 export type layout = tab[]
+
+export type percentage = {
+	name: string
+	id: number
+	percentage: number
+}
+
+export type questions = {
+	name: string
+	id: number
+	questions: questionInfo[]
+}
+
+export type analyticsInfo = {
+	questionsCount: number
+	correctQuestionsCount: number
+	wrongQuestionsCount: number
+	percentages: percentage[]
+	averagePercentage: number
+	reviewQuestions: questions[]
+}

@@ -4,16 +4,12 @@ import { Pressable, View, Text, Button } from "react-native"
 
 type props = {
 	statusHandler: React.Dispatch<React.SetStateAction<questionStatus>>
-	status: questionStatus
 	storeHandler: () => void
 }
 
-export default function StatusSelector({
-	statusHandler,
-	status: currentStatus,
-	storeHandler,
-}: props) {
+export default function StatusSelector({ statusHandler, storeHandler }: props) {
 	const [isStatusSelected, setIsStatusSelected] = useState(false)
+	const [currentStatus, setCurrentStatus] = useState<questionStatus>()
 	return (
 		<View className="gap-6">
 			<Pressable
@@ -22,6 +18,7 @@ export default function StatusSelector({
 				}`}
 				onPress={() => {
 					statusHandler("CORRECT")
+					setCurrentStatus("CORRECT")
 					setIsStatusSelected(true)
 				}}
 			>
@@ -41,6 +38,7 @@ export default function StatusSelector({
 				}`}
 				onPress={() => {
 					statusHandler("WRONG")
+					setCurrentStatus("WRONG")
 					setIsStatusSelected(true)
 				}}
 			>
@@ -62,6 +60,7 @@ export default function StatusSelector({
 				}`}
 				onPress={() => {
 					statusHandler("UNANSWERED")
+					setCurrentStatus("UNANSWERED")
 					setIsStatusSelected(true)
 				}}
 			>

@@ -53,7 +53,6 @@ export default function ChemistryPanel({
 			{isTopicChosen ? (
 				<StatusSelector
 					statusHandler={setStatus}
-					status={status}
 					storeHandler={callStoreHandler}
 				/>
 			) : (

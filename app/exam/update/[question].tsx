@@ -87,8 +87,11 @@ export default function Exam() {
 		}, [])
 	)
 	return (
-		<ScrollView showsVerticalScrollIndicator={false}>
-			<View className="flex1 bg-background px-4 py-20 justify-center items-center gap-6">
+		<ScrollView
+			showsVerticalScrollIndicator={false}
+			className="bg-background"
+		>
+			<View className="flex1 px-4 py-20 justify-center items-center gap-6">
 				<Text className="text-text text-6xl">{question}</Text>
 				<Text className="text-text text-xl">{previewSubject}</Text>
 				{previewSubject === "MATHEMATICS" && (
