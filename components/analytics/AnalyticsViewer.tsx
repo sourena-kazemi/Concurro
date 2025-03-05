@@ -219,7 +219,6 @@ export default function AnalyticsViewer({ examId }: props) {
 					])
 					break
 			}
-			console.log(subjectTopics)
 		}, [currentTab])
 	)
 
@@ -245,6 +244,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								questionsBySubject["CALCULUS"] || {}
 							}
 							title="CALCULUS"
+							background="PRIMARY"
 							variation="SMALL"
 							direction="COLUMN"
 						/>
@@ -253,6 +253,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								questionsBySubject["GEOMETRY"] || {}
 							}
 							title="GEOMETRY"
+							background="PRIMARY"
 							variation="SMALL"
 							direction="COLUMN"
 						/>
@@ -263,6 +264,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								questionsBySubject["DISCRETE"] || {}
 							}
 							title="DISCRETE"
+							background="PRIMARY"
 							variation="SMALL"
 							direction="COLUMN"
 						/>
@@ -271,6 +273,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								questionsBySubject["STATISTICS"] || {}
 							}
 							title="STATISTICS"
+							background="PRIMARY"
 							variation="SMALL"
 							direction="COLUMN"
 						/>
@@ -282,6 +285,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							questionsBySubject["CHEMISTRY_MEMO"] || {}
 						}
 						title="CHEMISTRY_MEMO"
+						background="PRIMARY"
 						variation="SMALL"
 						direction="ROW"
 					/>
@@ -290,6 +294,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							questionsBySubject["CHEMISTRY_CALC"] || {}
 						}
 						title="CHEMISTRY_CALC"
+						background="PRIMARY"
 						variation="SMALL"
 						direction="ROW"
 					/>
@@ -303,7 +308,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							className={`rounded-xl grow p-2 ${
 								currentTab === "CALCULUS"
 									? "bg-background border-2 border-primary"
-									: "bg-secondary"
+									: "bg-primary"
 							}`}
 							onPress={() => setCurrentTab("CALCULUS")}
 						>
@@ -311,7 +316,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								className={`text-center text-xl ${
 									currentTab === "CALCULUS"
 										? "text-primary"
-										: "text-text"
+										: "text-background"
 								}`}
 							>
 								CALCULUS
@@ -321,7 +326,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							className={`rounded-xl grow p-2 ${
 								currentTab === "GEOMETRY"
 									? "bg-background border-2 border-primary"
-									: "bg-secondary"
+									: "bg-primary"
 							}`}
 							onPress={() => setCurrentTab("GEOMETRY")}
 						>
@@ -329,7 +334,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								className={`text-center text-xl ${
 									currentTab === "GEOMETRY"
 										? "text-primary"
-										: "text-text"
+										: "text-background"
 								}`}
 							>
 								GEOMETRY
@@ -339,7 +344,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							className={`rounded-xl grow p-2 ${
 								currentTab === "DISCRETE"
 									? "bg-background border-2 border-primary"
-									: "bg-secondary"
+									: "bg-primary"
 							}`}
 							onPress={() => setCurrentTab("DISCRETE")}
 						>
@@ -347,7 +352,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								className={`text-center text-xl ${
 									currentTab === "DISCRETE"
 										? "text-primary"
-										: "text-text"
+										: "text-background"
 								}`}
 							>
 								DISCRETE
@@ -357,7 +362,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							className={`rounded-xl grow p-2 ${
 								currentTab === "STATISTICS"
 									? "bg-background border-2 border-primary"
-									: "bg-secondary"
+									: "bg-primary"
 							}`}
 							onPress={() => setCurrentTab("STATISTICS")}
 						>
@@ -365,7 +370,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								className={`text-center text-xl ${
 									currentTab === "STATISTICS"
 										? "text-primary"
-										: "text-text"
+										: "text-background"
 								}`}
 							>
 								STATISTICS
@@ -375,7 +380,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							className={`rounded-xl grow p-2 ${
 								currentTab === "PHYSICS"
 									? "bg-background border-2 border-primary"
-									: "bg-secondary"
+									: "bg-primary"
 							}`}
 							onPress={() => setCurrentTab("PHYSICS")}
 						>
@@ -383,7 +388,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								className={`text-center text-xl ${
 									currentTab === "PHYSICS"
 										? "text-primary"
-										: "text-text"
+										: "text-background"
 								}`}
 							>
 								PHYSICS
@@ -393,7 +398,7 @@ export default function AnalyticsViewer({ examId }: props) {
 							className={`rounded-xl grow p-2 ${
 								currentTab === "CHEMISTRY"
 									? "bg-background border-2 border-primary"
-									: "bg-secondary"
+									: "bg-primary"
 							}`}
 							onPress={() => setCurrentTab("CHEMISTRY")}
 						>
@@ -401,7 +406,7 @@ export default function AnalyticsViewer({ examId }: props) {
 								className={`text-center text-xl ${
 									currentTab === "CHEMISTRY"
 										? "text-primary"
-										: "text-text"
+										: "text-background"
 								}`}
 							>
 								CHEMISTRY
@@ -412,8 +417,10 @@ export default function AnalyticsViewer({ examId }: props) {
 				<View className="gap-3">
 					{subjectTopics.map((topic) => (
 						<AnalyticsBox
+							key={topic}
 							questionsByExam={questionsByTopic[topic] || {}}
 							title={topics[topic]}
+							background="SECONDARY"
 							variation="SMALL"
 							direction="ROW"
 						/>

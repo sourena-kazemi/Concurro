@@ -20,12 +20,14 @@ type props =
 	| {
 			questionsByExam: questionsByExam
 			title: string
+			background?: never
 			variation?: never
 			direction?: never
 	  }
 	| {
 			questionsByExam: questionsByExam
 			title: string
+			background: "PRIMARY" | "SECONDARY"
 			variation: "SMALL"
 			direction: "COLUMN" | "ROW"
 	  }
@@ -33,6 +35,7 @@ type props =
 export default function AnalyticsBox({
 	questionsByExam,
 	title,
+	background = "SECONDARY",
 	variation,
 	direction,
 }: props) {
@@ -123,7 +126,7 @@ export default function AnalyticsBox({
 	return (
 		<View
 			className={`rounded-xl p-4 grow flex-1 gap-4 ${
-				variation !== "SMALL" ? "bg-secondary" : "bg-primary"
+				background === "SECONDARY" ? "bg-secondary" : "bg-primary"
 			}`}
 		>
 			<View
@@ -133,14 +136,18 @@ export default function AnalyticsBox({
 			>
 				<Text
 					className={`text-2xl font-bold ${
-						variation !== "SMALL" ? "text-text" : "text-background"
+						background === "SECONDARY"
+							? "text-text"
+							: "text-background"
 					}`}
 				>
 					{title}
 				</Text>
 				<Text
 					className={`text-xl font-bold ${
-						variation !== "SMALL" ? "text-text" : "text-secondary"
+						background === "SECONDARY"
+							? "text-text"
+							: "text-secondary"
 					}`}
 				>
 					{averagePercentage || 0}%
