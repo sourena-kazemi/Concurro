@@ -9,7 +9,7 @@ import {
 import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
 import { router, useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { View, Text, ScrollView, Pressable, BackHandler } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 import { topics } from "@/constants/topics"
@@ -226,22 +226,21 @@ export default function AnalyticsViewer({ examId }: props) {
 			}
 		}, [currentTab])
 	)
-	useFocusEffect(
-		useCallback(() => {
-			const backAction = () => {
+	useEffect(() => {
+		const backAction = () => {}
+
+		const backHandler = BackHandler.addEventListener(
+			"hardwareBackPress",
+			() => {
 				if (isModalVisible) {
 					setIsModalVisible(false)
 					return true
 				}
+				return false
 			}
-
-			const backHandler = BackHandler.addEventListener(
-				"hardwareBackPress",
-				backAction
-			)
-			return () => backHandler.remove()
-		}, [])
-	)
+		)
+		return () => backHandler.remove()
+	}, [isModalVisible])
 
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
@@ -469,8 +468,8 @@ export default function AnalyticsViewer({ examId }: props) {
 				</View>
 			</View>
 			<View
-				className={`absolute bg-background inset-0 ${
-					isModalVisible ? "" : "hidden"
+				className={`absolute bg-background size-full left-0 ${
+					isModalVisible ? "top-0" : "top-full"
 				}`}
 			></View>
 		</ScrollView>
