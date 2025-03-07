@@ -9,13 +9,26 @@ import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
 import { useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { View, Text, ScrollView, Pressable, BackHandler } from "react-native"
+import {
+	View,
+	Text,
+	ScrollView,
+	Pressable,
+	BackHandler,
+	Dimensions,
+} from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 import { topics } from "@/constants/topics"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { LineChart } from "react-native-chart-kit"
+import Icon from "../icon"
+import * as MediaLibrary from "expo-media-library"
+import { captureRef } from "react-native-view-shot"
+import * as Sharing from "expo-sharing"
 
 type props = {
 	examId: string
+	title: string
 }
 type exam = {
 	[key: number]: string
@@ -26,7 +39,7 @@ type sortedQuestions = {
 	}
 }
 
-export default function AnalyticsViewer({ examId }: props) {
+export default function AnalyticsViewer({ examId, title }: props) {
 	const db = useSQLiteContext()
 
 	const [exams, setExams] = useState<exam>({})
@@ -45,6 +58,22 @@ export default function AnalyticsViewer({ examId }: props) {
 	const [currentYPosition, setCurrentYPosition] = useState(0)
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [modalMode, setModalMode] = useState<"SUBJECT" | "TOPIC">("SUBJECT")
+
+	const [permissionResponse, requestPermission] =
+		MediaLibrary.usePermissions()
+	const screenShotRef = useRef<View>(null)
+
+	const handleShare = async () => {
+		if (permissionResponse?.status !== "granted") {
+			await requestPermission()
+		}
+		try {
+			const localURI = await captureRef(screenShotRef)
+			await Sharing.shareAsync(localURI, { mimeType: "image/gif" })
+		} catch (e) {
+			console.error(e)
+		}
+	}
 
 	const sortQuestions = (questions: questionInfo[], exams: exam) => {
 		const questionsBySubject: sortedQuestions = {}
@@ -257,113 +286,123 @@ export default function AnalyticsViewer({ examId }: props) {
 		<ScrollView
 			showsVerticalScrollIndicator={false}
 			ref={scrollRef}
-			onScroll={(e) => {
+			onScrollEndDrag={(e) => {
 				if (!isModalVisible) {
 					setCurrentYPosition(e.nativeEvent.contentOffset.y)
 				}
 			}}
 		>
-			<View className="w-full gap-6 py-20">
-				<AnalyticsBox
-					modalModeHandler={() => setModalMode("SUBJECT")}
-					analyticsHandler={setAnalytics}
-					modalVisibilityHandler={setIsModalVisible}
-					questionsByExam={questionsBySubject["MATHEMATICS"] || {}}
-					title="MATHEMATICS"
-				/>
-				<AnalyticsBox
-					modalModeHandler={() => setModalMode("SUBJECT")}
-					analyticsHandler={setAnalytics}
-					modalVisibilityHandler={setIsModalVisible}
-					questionsByExam={questionsBySubject["PHYSICS"] || {}}
-					title="PHYSICS"
-				/>
-				<AnalyticsBox
-					modalModeHandler={() => setModalMode("SUBJECT")}
-					analyticsHandler={setAnalytics}
-					modalVisibilityHandler={setIsModalVisible}
-					questionsByExam={questionsBySubject["CHEMISTRY"] || {}}
-					title="CHEMISTRY"
-				/>
-				<View className="gap-3 mt-6">
-					<View className="flex-row gap-3">
-						<AnalyticsBox
-							modalModeHandler={() => setModalMode("SUBJECT")}
-							analyticsHandler={setAnalytics}
-							modalVisibilityHandler={setIsModalVisible}
-							questionsByExam={
-								questionsBySubject["CALCULUS"] || {}
-							}
-							title="CALCULUS"
-							background="PRIMARY"
-							variation="SMALL"
-							direction="COLUMN"
-						/>
-						<AnalyticsBox
-							modalModeHandler={() => setModalMode("SUBJECT")}
-							analyticsHandler={setAnalytics}
-							modalVisibilityHandler={setIsModalVisible}
-							questionsByExam={
-								questionsBySubject["GEOMETRY"] || {}
-							}
-							title="GEOMETRY"
-							background="PRIMARY"
-							variation="SMALL"
-							direction="COLUMN"
-						/>
-					</View>
-					<View className="flex-row gap-3">
-						<AnalyticsBox
-							modalModeHandler={() => setModalMode("SUBJECT")}
-							analyticsHandler={setAnalytics}
-							modalVisibilityHandler={setIsModalVisible}
-							questionsByExam={
-								questionsBySubject["DISCRETE"] || {}
-							}
-							title="DISCRETE"
-							background="PRIMARY"
-							variation="SMALL"
-							direction="COLUMN"
-						/>
-						<AnalyticsBox
-							modalModeHandler={() => setModalMode("SUBJECT")}
-							analyticsHandler={setAnalytics}
-							modalVisibilityHandler={setIsModalVisible}
-							questionsByExam={
-								questionsBySubject["STATISTICS"] || {}
-							}
-							title="STATISTICS"
-							background="PRIMARY"
-							variation="SMALL"
-							direction="COLUMN"
-						/>
-					</View>
+			<View className="w-full gap-6 py-10">
+				<View className="mt-6 flex-row justify-between items-center">
+					<Text className="text-text text-3xl">{title}</Text>
+					<Pressable onPress={() => handleShare()}>
+						<Icon name="share" color="#e4ece9" />
+					</Pressable>
 				</View>
-				<View className="gap-3 mt-6">
+				<View className="gap-6" ref={screenShotRef} collapsable={false}>
 					<AnalyticsBox
 						modalModeHandler={() => setModalMode("SUBJECT")}
 						analyticsHandler={setAnalytics}
 						modalVisibilityHandler={setIsModalVisible}
 						questionsByExam={
-							questionsBySubject["CHEMISTRY_MEMO"] || {}
+							questionsBySubject["MATHEMATICS"] || {}
 						}
-						title="CHEMISTRY_MEMO"
-						background="PRIMARY"
-						variation="SMALL"
-						direction="ROW"
+						title="MATHEMATICS"
 					/>
 					<AnalyticsBox
 						modalModeHandler={() => setModalMode("SUBJECT")}
 						analyticsHandler={setAnalytics}
 						modalVisibilityHandler={setIsModalVisible}
-						questionsByExam={
-							questionsBySubject["CHEMISTRY_CALC"] || {}
-						}
-						title="CHEMISTRY_CALC"
-						background="PRIMARY"
-						variation="SMALL"
-						direction="ROW"
+						questionsByExam={questionsBySubject["PHYSICS"] || {}}
+						title="PHYSICS"
 					/>
+					<AnalyticsBox
+						modalModeHandler={() => setModalMode("SUBJECT")}
+						analyticsHandler={setAnalytics}
+						modalVisibilityHandler={setIsModalVisible}
+						questionsByExam={questionsBySubject["CHEMISTRY"] || {}}
+						title="CHEMISTRY"
+					/>
+					<View className="gap-3 mt-6">
+						<View className="flex-row gap-3">
+							<AnalyticsBox
+								modalModeHandler={() => setModalMode("SUBJECT")}
+								analyticsHandler={setAnalytics}
+								modalVisibilityHandler={setIsModalVisible}
+								questionsByExam={
+									questionsBySubject["CALCULUS"] || {}
+								}
+								title="CALCULUS"
+								background="PRIMARY"
+								variation="SMALL"
+								direction="COLUMN"
+							/>
+							<AnalyticsBox
+								modalModeHandler={() => setModalMode("SUBJECT")}
+								analyticsHandler={setAnalytics}
+								modalVisibilityHandler={setIsModalVisible}
+								questionsByExam={
+									questionsBySubject["GEOMETRY"] || {}
+								}
+								title="GEOMETRY"
+								background="PRIMARY"
+								variation="SMALL"
+								direction="COLUMN"
+							/>
+						</View>
+						<View className="flex-row gap-3">
+							<AnalyticsBox
+								modalModeHandler={() => setModalMode("SUBJECT")}
+								analyticsHandler={setAnalytics}
+								modalVisibilityHandler={setIsModalVisible}
+								questionsByExam={
+									questionsBySubject["DISCRETE"] || {}
+								}
+								title="DISCRETE"
+								background="PRIMARY"
+								variation="SMALL"
+								direction="COLUMN"
+							/>
+							<AnalyticsBox
+								modalModeHandler={() => setModalMode("SUBJECT")}
+								analyticsHandler={setAnalytics}
+								modalVisibilityHandler={setIsModalVisible}
+								questionsByExam={
+									questionsBySubject["STATISTICS"] || {}
+								}
+								title="STATISTICS"
+								background="PRIMARY"
+								variation="SMALL"
+								direction="COLUMN"
+							/>
+						</View>
+					</View>
+					<View className="gap-3 mt-6">
+						<AnalyticsBox
+							modalModeHandler={() => setModalMode("SUBJECT")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
+							questionsByExam={
+								questionsBySubject["CHEMISTRY_MEMO"] || {}
+							}
+							title="CHEMISTRY_MEMO"
+							background="PRIMARY"
+							variation="SMALL"
+							direction="ROW"
+						/>
+						<AnalyticsBox
+							modalModeHandler={() => setModalMode("SUBJECT")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
+							questionsByExam={
+								questionsBySubject["CHEMISTRY_CALC"] || {}
+							}
+							title="CHEMISTRY_CALC"
+							background="PRIMARY"
+							variation="SMALL"
+							direction="ROW"
+						/>
+					</View>
 				</View>
 				<ScrollView
 					horizontal={true}
@@ -538,6 +577,46 @@ export default function AnalyticsViewer({ examId }: props) {
 							</View>
 						</View>
 					</View>
+					{analytics && analytics.percentages.length > 1 && (
+						<ScrollView
+							horizontal={true}
+							showsHorizontalScrollIndicator={false}
+							className="mt-6 -mx-4"
+						>
+							<LineChart
+								data={{
+									labels: (analytics && [
+										...analytics.percentages.map(
+											(exam) => `${exam.id}`
+										),
+									]) || ["error"],
+									datasets: [
+										{
+											data: (analytics &&
+												analytics.percentages.map(
+													(exam) => exam.percentage
+												)) || [0],
+										},
+									],
+								}}
+								width={
+									Dimensions.get("window").width *
+									(analytics.percentages.length / 5)
+								}
+								height={300}
+								yAxisSuffix="%"
+								yAxisInterval={10}
+								chartConfig={{
+									decimalPlaces: 0,
+									backgroundGradientFrom: "#1D2025",
+									backgroundGradientTo: "#1D2025",
+									color: (opacity = 1) =>
+										`rgba(49, 211, 154,${opacity})`,
+									labelColor: () => "#e4ece9",
+								}}
+							/>
+						</ScrollView>
+					)}
 					<View className="gap-6">
 						{analytics?.reviewQuestions.map(
 							(exam) =>

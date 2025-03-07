@@ -56,5 +56,23 @@ export default function Icon({ name, color, className }: props) {
 					<Path d="M8 12h8M12 8v8" />
 				</Svg>
 			)
+		case "share":
+			return (
+				<Svg
+					width={24}
+					height={24}
+					fill="none"
+					stroke={color}
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					strokeWidth={2}
+					className={className}
+				>
+					<Circle cx={18} cy={5} r={3} />
+					<Circle cx={6} cy={12} r={3} />
+					<Circle cx={18} cy={19} r={3} />
+					<Path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98" />
+				</Svg>
+			)
 	}
 }
