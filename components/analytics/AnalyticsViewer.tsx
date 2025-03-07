@@ -3,16 +3,16 @@ import {
 	type examInfo,
 	type questionInfo,
 	type topic,
-	type percentage,
 	type analyticsInfo,
 } from "@/types/types"
 import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
-import { router, useFocusEffect } from "expo-router"
+import { useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { View, Text, ScrollView, Pressable, BackHandler } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 import { topics } from "@/constants/topics"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type props = {
 	examId: string
@@ -40,8 +40,11 @@ export default function AnalyticsViewer({ examId }: props) {
 	const [currentTab, setCurrentTab] = useState<subject>("CALCULUS")
 	const [subjectTopics, setSubjectTopics] = useState<topic[]>([])
 
-	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [analytics, setAnalytics] = useState<analyticsInfo>()
+	const scrollRef = useRef(null)
+	const [currentYPosition, setCurrentYPosition] = useState(0)
+	const [isModalVisible, setIsModalVisible] = useState(false)
+	const [modalMode, setModalMode] = useState<"SUBJECT" | "TOPIC">("SUBJECT")
 
 	const sortQuestions = (questions: questionInfo[], exams: exam) => {
 		const questionsBySubject: sortedQuestions = {}
@@ -227,13 +230,21 @@ export default function AnalyticsViewer({ examId }: props) {
 		}, [currentTab])
 	)
 	useEffect(() => {
-		const backAction = () => {}
-
+		if (isModalVisible) {
+			// @ts-ignore
+			scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true })
+		}
 		const backHandler = BackHandler.addEventListener(
 			"hardwareBackPress",
 			() => {
 				if (isModalVisible) {
 					setIsModalVisible(false)
+					// @ts-ignore
+					scrollRef.current?.scrollTo({
+						x: 0,
+						y: currentYPosition,
+						animated: true,
+					})
 					return true
 				}
 				return false
@@ -243,31 +254,43 @@ export default function AnalyticsViewer({ examId }: props) {
 	}, [isModalVisible])
 
 	return (
-		<ScrollView showsVerticalScrollIndicator={false}>
+		<ScrollView
+			showsVerticalScrollIndicator={false}
+			ref={scrollRef}
+			onScroll={(e) => {
+				if (!isModalVisible) {
+					setCurrentYPosition(e.nativeEvent.contentOffset.y)
+				}
+			}}
+		>
 			<View className="w-full gap-6 py-20">
 				<AnalyticsBox
-					handleAnalytics={setAnalytics}
-					handleModalVisibility={setIsModalVisible}
+					modalModeHandler={() => setModalMode("SUBJECT")}
+					analyticsHandler={setAnalytics}
+					modalVisibilityHandler={setIsModalVisible}
 					questionsByExam={questionsBySubject["MATHEMATICS"] || {}}
 					title="MATHEMATICS"
 				/>
 				<AnalyticsBox
-					handleAnalytics={setAnalytics}
-					handleModalVisibility={setIsModalVisible}
+					modalModeHandler={() => setModalMode("SUBJECT")}
+					analyticsHandler={setAnalytics}
+					modalVisibilityHandler={setIsModalVisible}
 					questionsByExam={questionsBySubject["PHYSICS"] || {}}
 					title="PHYSICS"
 				/>
 				<AnalyticsBox
-					handleAnalytics={setAnalytics}
-					handleModalVisibility={setIsModalVisible}
+					modalModeHandler={() => setModalMode("SUBJECT")}
+					analyticsHandler={setAnalytics}
+					modalVisibilityHandler={setIsModalVisible}
 					questionsByExam={questionsBySubject["CHEMISTRY"] || {}}
 					title="CHEMISTRY"
 				/>
 				<View className="gap-3 mt-6">
 					<View className="flex-row gap-3">
 						<AnalyticsBox
-							handleAnalytics={setAnalytics}
-							handleModalVisibility={setIsModalVisible}
+							modalModeHandler={() => setModalMode("SUBJECT")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
 							questionsByExam={
 								questionsBySubject["CALCULUS"] || {}
 							}
@@ -277,8 +300,9 @@ export default function AnalyticsViewer({ examId }: props) {
 							direction="COLUMN"
 						/>
 						<AnalyticsBox
-							handleAnalytics={setAnalytics}
-							handleModalVisibility={setIsModalVisible}
+							modalModeHandler={() => setModalMode("SUBJECT")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
 							questionsByExam={
 								questionsBySubject["GEOMETRY"] || {}
 							}
@@ -290,8 +314,9 @@ export default function AnalyticsViewer({ examId }: props) {
 					</View>
 					<View className="flex-row gap-3">
 						<AnalyticsBox
-							handleAnalytics={setAnalytics}
-							handleModalVisibility={setIsModalVisible}
+							modalModeHandler={() => setModalMode("SUBJECT")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
 							questionsByExam={
 								questionsBySubject["DISCRETE"] || {}
 							}
@@ -301,8 +326,9 @@ export default function AnalyticsViewer({ examId }: props) {
 							direction="COLUMN"
 						/>
 						<AnalyticsBox
-							handleAnalytics={setAnalytics}
-							handleModalVisibility={setIsModalVisible}
+							modalModeHandler={() => setModalMode("SUBJECT")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
 							questionsByExam={
 								questionsBySubject["STATISTICS"] || {}
 							}
@@ -315,8 +341,9 @@ export default function AnalyticsViewer({ examId }: props) {
 				</View>
 				<View className="gap-3 mt-6">
 					<AnalyticsBox
-						handleAnalytics={setAnalytics}
-						handleModalVisibility={setIsModalVisible}
+						modalModeHandler={() => setModalMode("SUBJECT")}
+						analyticsHandler={setAnalytics}
+						modalVisibilityHandler={setIsModalVisible}
 						questionsByExam={
 							questionsBySubject["CHEMISTRY_MEMO"] || {}
 						}
@@ -326,8 +353,9 @@ export default function AnalyticsViewer({ examId }: props) {
 						direction="ROW"
 					/>
 					<AnalyticsBox
-						handleAnalytics={setAnalytics}
-						handleModalVisibility={setIsModalVisible}
+						modalModeHandler={() => setModalMode("SUBJECT")}
+						analyticsHandler={setAnalytics}
+						modalVisibilityHandler={setIsModalVisible}
 						questionsByExam={
 							questionsBySubject["CHEMISTRY_CALC"] || {}
 						}
@@ -455,8 +483,9 @@ export default function AnalyticsViewer({ examId }: props) {
 				<View className="gap-3">
 					{subjectTopics.map((topic) => (
 						<AnalyticsBox
-							handleAnalytics={setAnalytics}
-							handleModalVisibility={setIsModalVisible}
+							modalModeHandler={() => setModalMode("TOPIC")}
+							analyticsHandler={setAnalytics}
+							modalVisibilityHandler={setIsModalVisible}
 							key={topic}
 							questionsByExam={questionsByTopic[topic] || {}}
 							title={topics[topic]}
@@ -467,11 +496,84 @@ export default function AnalyticsViewer({ examId }: props) {
 					))}
 				</View>
 			</View>
-			<View
-				className={`absolute bg-background size-full left-0 ${
+			<SafeAreaView
+				className={`flex-1 size-full absolute bg-background left-0 ${
 					isModalVisible ? "top-0" : "top-full"
 				}`}
-			></View>
+			>
+				<View className="py-20 gap-6">
+					<View className="rounded-xl p-4 gap-4 bg-secondary">
+						<View className="justify-between items-center flex-row ">
+							<Text className="text-2xl font-bold text-text">
+								{analytics?.title}
+							</Text>
+							<Text className="text-xl font-bold text-text">
+								{analytics?.percentages.length !== 0
+									? analytics?.averagePercentage
+									: "-"}
+								%
+							</Text>
+						</View>
+						<View className="flex-row items-center justify-between gap-4">
+							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+								<Text className="text-text">Correct</Text>
+								<Text className="text-accent text-xl">
+									{analytics?.correctQuestionsCount}
+								</Text>
+							</View>
+							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+								<Text className="text-text ">Wrong</Text>
+								<Text className="text-error text-xl">
+									{analytics?.wrongQuestionsCount}
+								</Text>
+							</View>
+							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
+								<Text className="text-text ">Unanswered</Text>
+								<Text className="text-text text-xl">
+									{analytics &&
+										analytics.questionsCount -
+											analytics.correctQuestionsCount -
+											analytics.wrongQuestionsCount}
+								</Text>
+							</View>
+						</View>
+					</View>
+					<View className="gap-6">
+						{analytics?.reviewQuestions.map(
+							(exam) =>
+								!!exam.questions.length && (
+									<View key={exam.id} className="gap-3">
+										{analytics.percentages.length > 1 && (
+											<Text className="text-text text-3xl">
+												{exam.name}
+											</Text>
+										)}
+										{exam.questions.map((question) => (
+											<View
+												key={question.number}
+												className="flex-row bg-secondary p-4 rounded-xl justify-between items-center"
+											>
+												<View className="flex-row gap-3">
+													<Text className="text-text text-3xl">
+														{question.number}
+													</Text>
+													<Text className="text-text text-xl">
+														{modalMode ===
+															"SUBJECT" &&
+															question.topic}
+													</Text>
+												</View>
+												<Text className="text-background">
+													{question.status}
+												</Text>
+											</View>
+										))}
+									</View>
+								)
+						)}
+					</View>
+				</View>
+			</SafeAreaView>
 		</ScrollView>
 	)
 }

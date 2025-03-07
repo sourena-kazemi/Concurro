@@ -75,6 +75,7 @@ export type questions = {
 }
 
 export type analyticsInfo = {
+	title: string
 	questionsCount: number
 	correctQuestionsCount: number
 	wrongQuestionsCount: number

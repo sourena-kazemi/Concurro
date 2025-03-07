@@ -44,7 +44,7 @@ export default function Index() {
 						className="bg-secondary rounded-xl p-4 w-full flex flex-row justify-between items-center"
 						key={exam.id}
 					>
-						<View className="flex flex-row gap-4 items-center">
+						<View className="flex flex-row gap-3 items-center">
 							<Text className="text-text text-3xl">{`${exam.id}`}</Text>
 							<Text className="text-text text-xl font-bold">{`${exam.name}`}</Text>
 						</View>

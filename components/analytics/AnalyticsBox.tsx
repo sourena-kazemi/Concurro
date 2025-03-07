@@ -11,14 +11,16 @@ import { View, Text, Pressable } from "react-native"
 type questionsByExam = {
 	[key: number]: { name: string; id: number; questions: questionInfo[] }
 }
-type props =
+type props = {
+	questionsByExam: questionsByExam
+	title: string
+	analyticsHandler: React.Dispatch<
+		React.SetStateAction<analyticsInfo | undefined>
+	>
+	modalVisibilityHandler: React.Dispatch<React.SetStateAction<boolean>>
+	modalModeHandler: () => void
+} & (
 	| {
-			questionsByExam: questionsByExam
-			title: string
-			handleAnalytics: React.Dispatch<
-				React.SetStateAction<analyticsInfo | undefined>
-			>
-			handleModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
 			background?: never
 			variation?: never
 			direction?: never
@@ -26,20 +28,27 @@ type props =
 	| {
 			questionsByExam: questionsByExam
 			title: string
-			handleAnalytics: React.Dispatch<
+			analyticsHandler: React.Dispatch<
 				React.SetStateAction<analyticsInfo | undefined>
 			>
-			handleModalVisibility: React.Dispatch<React.SetStateAction<boolean>>
+			modalVisibilityHandler: React.Dispatch<
+				React.SetStateAction<boolean>
+			>
+			modalModeHandler: React.Dispatch<
+				React.SetStateAction<"SUBJECT" | "TOPIC">
+			>
 			background: "PRIMARY" | "SECONDARY"
 			variation: "SMALL"
 			direction: "COLUMN" | "ROW"
 	  }
+)
 
 export default function AnalyticsBox({
 	questionsByExam,
 	title,
-	handleAnalytics,
-	handleModalVisibility,
+	analyticsHandler,
+	modalVisibilityHandler,
+	modalModeHandler,
 	background = "SECONDARY",
 	variation,
 	direction,
@@ -135,8 +144,10 @@ export default function AnalyticsBox({
 	return (
 		<Pressable
 			onPress={() => {
-				handleModalVisibility(true)
-				handleAnalytics({
+				modalModeHandler()
+				modalVisibilityHandler(true)
+				analyticsHandler({
+					title,
 					questionsCount,
 					correctQuestionsCount,
 					wrongQuestionsCount,
