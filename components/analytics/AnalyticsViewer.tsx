@@ -15,7 +15,7 @@ import {
 	ScrollView,
 	Pressable,
 	BackHandler,
-	Dimensions,
+	Share,
 } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 import { topics } from "@/constants/topics"
@@ -69,7 +69,9 @@ export default function AnalyticsViewer({ examId, title }: props) {
 		}
 		try {
 			const localURI = await captureRef(screenShotRef)
-			await Sharing.shareAsync(localURI, { mimeType: "image/gif" })
+			await Sharing.shareAsync(localURI, {
+				mimeType: "image/gif",
+			})
 		} catch (e) {
 			console.error(e)
 		}
@@ -299,7 +301,11 @@ export default function AnalyticsViewer({ examId, title }: props) {
 						<Icon name="share" color="#e4ece9" />
 					</Pressable>
 				</View>
-				<View className="gap-6" ref={screenShotRef} collapsable={false}>
+				<View
+					className="gap-6 bg-background"
+					ref={screenShotRef}
+					collapsable={false}
+				>
 					<AnalyticsBox
 						modalModeHandler={() => setModalMode("SUBJECT")}
 						analyticsHandler={setAnalytics}
@@ -540,7 +546,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 					isModalVisible ? "top-0" : "top-full"
 				}`}
 			>
-				<View className="py-20 gap-6">
+				<View className="py-10 gap-6">
 					<View className="rounded-xl p-4 gap-4 bg-secondary">
 						<View className="justify-between items-center flex-row ">
 							<Text className="text-2xl font-bold text-text">
@@ -599,10 +605,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										},
 									],
 								}}
-								width={
-									Dimensions.get("window").width *
-									(analytics.percentages.length / 5)
-								}
+								width={analytics.percentages.length * 75}
 								height={300}
 								yAxisSuffix="%"
 								yAxisInterval={10}

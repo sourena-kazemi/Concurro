@@ -75,6 +75,23 @@ export default function Exam() {
 					Update
 				</Text>
 			</Pressable>
+			<Pressable
+				onPress={() => {
+					router.navigate(
+						`/exam/answerSheet/${id}?size=${examInfo?.size}`
+					)
+				}}
+				disabled={examInfo?.status === "COMPLETED"}
+				className={`rounded-xl p-3 w-full ${
+					examInfo?.status === "COMPLETED"
+						? "bg-text opacity-50"
+						: "bg-accent"
+				}`}
+			>
+				<Text className="text-background text-center text-xl">
+					Answer Sheet
+				</Text>
+			</Pressable>
 		</View>
 	)
 }
