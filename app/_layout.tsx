@@ -9,7 +9,8 @@ export default function RootLayout() {
 		await db.execAsync(
 			`CREATE TABLE IF NOT EXISTS exams (id INTEGER PRIMARY KEY, name TEXT NOT NULL, size INTEGER, status TEXT NOT NULL, mathStart INTEGER, mathEnd INTEGER, physicsStart INTEGER, physicsEnd INTEGER, chemistryStart INTEGER, chemistryEnd INTEGER);
 			CREATE TABLE IF NOT EXISTS questions (number INTEGER, status TEXT NOT NULL, subject TEXT NOT NULL, topic TEXT NOT NULL, exam INTEGER);
-			CREATE TABLE IF NOT EXISTS answers (number INTEGER, choice INTEGER, exam INTEGER);
+			DROP TABLE answers;
+			CREATE TABLE IF NOT EXISTS answers (number INTEGER PRIMARY KEY, choice INTEGER, exam INTEGER);
 			`
 		)
 	}
