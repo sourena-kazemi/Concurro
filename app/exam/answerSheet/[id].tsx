@@ -1,13 +1,15 @@
 import { useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
-import { useCallback, useReducer } from "react"
+import { useCallback, useEffect, useReducer, useRef } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { type answer } from "@/types/types"
 
 type answers = {
 	[key: number]: number
 }
-type reducerAction = { type: "SET_OR_UPDATE"; question: number; choice: number }
+type reducerAction =
+	| { type: "SET_OR_UPDATE"; question: number; choice: number }
+	| { type: "DELETE"; question: number }
 
 function reducer(state: answers, action: reducerAction): answers {
 	if (action.type === "SET_OR_UPDATE") {
@@ -16,39 +18,91 @@ function reducer(state: answers, action: reducerAction): answers {
 			[action.question]: action.choice,
 		}
 	}
-	throw Error("Unknown action : " + action.type)
+	if (action.type === "DELETE") {
+		let tempState = state
+		delete tempState[action.question]
+		return {
+			...tempState,
+		}
+	}
+	throw Error("Unknown action")
 }
 
 export default function AnswerSheet() {
 	const { id, size } = useLocalSearchParams<{ id: string; size?: string }>()
 
 	const [answers, dispatch] = useReducer(reducer, {})
+	const optionsRef = useRef(new Map())
 
 	const db = useSQLiteContext()
+
+	const setBackgroundColors = (
+		number: number,
+		choice: number,
+		type: "SET" | "DELETE"
+	) => {
+		if (type === "DELETE") {
+			optionsRef.current.get(number * 10 + choice).setNativeProps({
+				style: { backgroundColor: "rgba(29,32,37,0.5)" },
+			})
+		}
+		if (type === "SET") {
+			optionsRef.current.get(number * 10 + 1).setNativeProps({
+				style: { backgroundColor: "rgba(29,32,37,0.5)" },
+			})
+			optionsRef.current.get(number * 10 + 2).setNativeProps({
+				style: { backgroundColor: "rgba(29,32,37,0.5)" },
+			})
+			optionsRef.current.get(number * 10 + 3).setNativeProps({
+				style: { backgroundColor: "rgba(29,32,37,0.5)" },
+			})
+			optionsRef.current.get(number * 10 + 4).setNativeProps({
+				style: { backgroundColor: "rgba(29,32,37,0.5)" },
+			})
+
+			optionsRef.current.get(number * 10 + choice).setNativeProps({
+				style: { backgroundColor: "rgba(150,212,190,0.5)" },
+			})
+		}
+	}
 
 	const fetchQuestions = async () => {
 		const result = await db.getAllAsync<answer>(
 			"SELECT * FROM answers WHERE exam = ?",
 			id
 		)
-		const answers: answers = {}
 		if (result) {
-			result.map((answer) =>
+			result.map((answer) => {
 				dispatch({
 					type: "SET_OR_UPDATE",
 					question: answer.number,
 					choice: answer.choice,
 				})
-			)
+				setBackgroundColors(answer.number, answer.choice, "SET")
+			})
 		}
 	}
 
 	const storeAnswerInDb = async (number: number, choice: number) => {
-		const result = await db.runAsync(
-			"INSERT INTO answers (number,choice,exam) VALUES (?,?,?) ON CONFLICT (number) DO UPDATE SET choice=excluded.choice,exam=excluded.exam",
-			[number, choice, +id]
-		)
-		dispatch({ type: "SET_OR_UPDATE", question: number, choice: choice })
+		if (answers[number] === choice) {
+			const result = await db.runAsync(
+				"DELETE FROM answers WHERE number = ?",
+				number
+			)
+			dispatch({ type: "DELETE", question: number })
+			setBackgroundColors(number, choice, "DELETE")
+		} else {
+			const result = await db.runAsync(
+				"INSERT INTO answers (number,choice,exam) VALUES (?,?,?) ON CONFLICT (number) DO UPDATE SET choice=excluded.choice,exam=excluded.exam",
+				[number, choice, +id]
+			)
+			dispatch({
+				type: "SET_OR_UPDATE",
+				question: number,
+				choice: choice,
+			})
+			setBackgroundColors(number, choice, "SET")
+		}
 	}
 
 	useFocusEffect(
@@ -56,6 +110,11 @@ export default function AnswerSheet() {
 			fetchQuestions()
 		}, [])
 	)
+	useEffect(() => {
+		for (const [question, choice] of Object.entries(answers)) {
+			setBackgroundColors(+question, choice, "SET")
+		}
+	}, [answers])
 
 	return (
 		<ScrollView
@@ -77,11 +136,17 @@ export default function AnswerSheet() {
 									onPress={() =>
 										storeAnswerInDb(index + 1, 1)
 									}
-									className={`${
-										answers[index + 1] === 1
-											? "bg-primary/50"
-											: "bg-background/50"
-									} rounded-xl p-3 grow`}
+									className="bg-background/50 rounded-xl p-3 grow"
+									ref={(element) =>
+										element
+											? optionsRef.current.set(
+													(index + 1) * 10 + 1,
+													element
+											  )
+											: optionsRef.current.delete(
+													(index + 1) * 10 + 1
+											  )
+									}
 								>
 									<Text className="text-text text-center">
 										1
@@ -91,11 +156,17 @@ export default function AnswerSheet() {
 									onPress={() =>
 										storeAnswerInDb(index + 1, 2)
 									}
-									className={`${
-										answers[index + 1] === 2
-											? "bg-text/50"
-											: "bg-background/50"
-									} rounded-xl p-3 grow`}
+									className="bg-background/50 rounded-xl p-3 grow"
+									ref={(element) =>
+										element
+											? optionsRef.current.set(
+													(index + 1) * 10 + 2,
+													element
+											  )
+											: optionsRef.current.delete(
+													(index + 1) * 10 + 2
+											  )
+									}
 								>
 									<Text className="text-text text-center">
 										2
@@ -105,11 +176,17 @@ export default function AnswerSheet() {
 									onPress={() =>
 										storeAnswerInDb(index + 1, 3)
 									}
-									className={`${
-										answers[index + 1] === 3
-											? "bg-text/50"
-											: "bg-background/50"
-									} rounded-xl p-3 grow`}
+									className="bg-background/50 rounded-xl p-3 grow"
+									ref={(element) =>
+										element
+											? optionsRef.current.set(
+													(index + 1) * 10 + 3,
+													element
+											  )
+											: optionsRef.current.delete(
+													(index + 1) * 10 + 3
+											  )
+									}
 								>
 									<Text className="text-text text-center">
 										3
@@ -119,11 +196,17 @@ export default function AnswerSheet() {
 									onPress={() =>
 										storeAnswerInDb(index + 1, 4)
 									}
-									className={`${
-										answers[index + 1] === 4
-											? "bg-text/50"
-											: "bg-background/50"
-									} rounded-xl p-3 grow`}
+									className="bg-background/50 rounded-xl p-3 grow"
+									ref={(element) =>
+										element
+											? optionsRef.current.set(
+													(index + 1) * 10 + 4,
+													element
+											  )
+											: optionsRef.current.delete(
+													(index + 1) * 10 + 4
+											  )
+									}
 								>
 									<Text className="text-text text-center">
 										4
