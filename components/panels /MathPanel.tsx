@@ -13,12 +13,14 @@ type props = {
 	storeHandler: (questionData: questionInfo) => Promise<void>
 	questionNumber: string
 	examId: string
+	answer: number
 }
 
 export default function MathPanel({
 	storeHandler,
 	questionNumber,
 	examId,
+	answer,
 }: props) {
 	const [currentTab, setCurrentTab] = useState("calculus")
 	const [subject, setSubject] = useState("calculus")
@@ -58,6 +60,7 @@ export default function MathPanel({
 				<StatusSelector
 					statusHandler={setStatus}
 					storeHandler={callStoreHandler}
+					answer={answer}
 				/>
 			) : (
 				<TopicSelector

@@ -13,12 +13,14 @@ type props = {
 	storeHandler: (questionData: questionInfo) => Promise<void>
 	questionNumber: string
 	examId: string
+	answer: number
 }
 
 export default function PhysicsPanel({
 	storeHandler,
 	questionNumber,
 	examId,
+	answer,
 }: props) {
 	const [currentTab, setCurrentTab] = useState("12")
 	const [sections, setSections] = useState<section[]>(
@@ -54,6 +56,7 @@ export default function PhysicsPanel({
 				<StatusSelector
 					statusHandler={setStatus}
 					storeHandler={callStoreHandler}
+					answer={answer}
 				/>
 			) : (
 				<TopicSelector

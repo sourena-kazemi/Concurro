@@ -74,5 +74,21 @@ export default function Icon({ name, color, className }: props) {
 					<Path d="m8.59 13.51 6.83 3.98M15.41 6.51l-6.82 3.98" />
 				</Svg>
 			)
+		case "paper":
+			return (
+				<Svg
+					width={24}
+					height={24}
+					fill="none"
+					stroke={color}
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					strokeWidth={2}
+					className={className}
+				>
+					<Path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z" />
+					<Path d="M15 3v4a2 2 0 0 0 2 2h4" />
+				</Svg>
+			)
 	}
 }

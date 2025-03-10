@@ -6,7 +6,7 @@ import {
 	type analyticsInfo,
 } from "@/types/types"
 import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
-import { useFocusEffect } from "expo-router"
+import { router, useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
@@ -43,6 +43,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 	const db = useSQLiteContext()
 
 	const [exams, setExams] = useState<exam>({})
+	const [examSize, setExamSize] = useState(0)
 	const [questions, setQuestions] = useState<questionInfo[]>([])
 	const [questionsBySubject, setQuestionsBySubject] =
 		useState<sortedQuestions>({})
@@ -175,6 +176,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 		if (examResult) {
 			setQuestions(questionsResult)
 			setExams({ [examResult.id]: examResult.name })
+			setExamSize(examResult.size)
 			sortQuestions(questionsResult, { [examResult.id]: examResult.name })
 		}
 	}
@@ -295,11 +297,24 @@ export default function AnalyticsViewer({ examId, title }: props) {
 			}}
 		>
 			<View className="w-full gap-6 py-10">
-				<View className="mt-6 flex-row justify-between items-center">
-					<Text className="text-text text-3xl">{title}</Text>
-					<Pressable onPress={() => handleShare()}>
-						<Icon name="share" color="#e4ece9" />
-					</Pressable>
+				<View className="mt-6 flex-row justify-between items-center flex-wrap gap-3">
+					<Text className="text-text text-2xl">{title}</Text>
+					<View className="flex-row gap-3 items-center justify-end grow">
+						{examId !== "*" && (
+							<Pressable
+								onPress={() =>
+									router.navigate(
+										`/exam/answerSheet/${examId}?size=${examSize}`
+									)
+								}
+							>
+								<Icon name="paper" color="#e4ece9" />
+							</Pressable>
+						)}
+						<Pressable onPress={() => handleShare()}>
+							<Icon name="share" color="#e4ece9" />
+						</Pressable>
+					</View>
 				</View>
 				<View
 					className="gap-6 bg-background"

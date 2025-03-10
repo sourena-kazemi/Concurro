@@ -6,6 +6,7 @@ import {
 	type subject,
 	type examInfo,
 	type questionInfo,
+	answer,
 } from "@/types/types"
 import { useCallback, useState } from "react"
 import MathPanel from "@/components/panels /MathPanel"
@@ -22,6 +23,7 @@ export default function Exam() {
 
 	const [examInfo, setExamInfo] = useState<examInfo | null>(null)
 	const [previewSubject, setPreviewSubject] = useState<previewSubject>()
+	const [answer, setAnswer] = useState(0)
 
 	const storeQuestionInDB = async (questionData: questionInfo) => {
 		const nextQuestionNumber = +question + 1
@@ -80,10 +82,20 @@ export default function Exam() {
 		setExamInfo(result)
 		determineSubject(result)
 	}
+	const fetchAnswer = async () => {
+		const result = await db.getFirstAsync<answer>(
+			"SELECT * FROM answers WHERE exam = ? AND number = ?",
+			[exam, question]
+		)
+		if (result) {
+			setAnswer(result.choice)
+		}
+	}
 
 	useFocusEffect(
 		useCallback(() => {
 			fetchExamInfo()
+			fetchAnswer()
 		}, [])
 	)
 	return (
@@ -99,6 +111,7 @@ export default function Exam() {
 						storeHandler={storeQuestionInDB}
 						questionNumber={question}
 						examId={exam}
+						answer={answer}
 					/>
 				)}
 				{previewSubject === "PHYSICS" && (
@@ -106,6 +119,7 @@ export default function Exam() {
 						storeHandler={storeQuestionInDB}
 						questionNumber={question}
 						examId={exam}
+						answer={answer}
 					/>
 				)}
 				{previewSubject === "CHEMISTRY" && (
@@ -113,6 +127,7 @@ export default function Exam() {
 						storeHandler={storeQuestionInDB}
 						questionNumber={question}
 						examId={exam}
+						answer={answer}
 					/>
 				)}
 			</View>

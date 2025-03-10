@@ -1,13 +1,9 @@
 import { useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
-import { useCallback, useEffect, useReducer } from "react"
+import { useCallback, useReducer } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
+import { type answer } from "@/types/types"
 
-type answer = {
-	number: number
-	choice: number
-	exam: number
-}
 type answers = {
 	[key: number]: number
 }

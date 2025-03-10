@@ -83,3 +83,9 @@ export type analyticsInfo = {
 	averagePercentage: number
 	reviewQuestions: questions[]
 }
+
+export type answer = {
+	number: number
+	choice: number
+	exam: number
+}
