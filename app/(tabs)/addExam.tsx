@@ -1,4 +1,4 @@
-import { View, TextInput, Pressable } from "react-native"
+import { View, TextInput, Pressable, ScrollView } from "react-native"
 import { useState } from "react"
 import { useSQLiteContext } from "expo-sqlite"
 import { router } from "expo-router"
@@ -95,95 +95,104 @@ export default function AddExam() {
 	}
 
 	return (
-		<View className="flex-1 items-center bg-background w-full gap-3 px-4 py-20 ">
-			<StyledText className="text-text text-3xl">افزودن آزمون</StyledText>
-			<TextInput
-				style={{ fontFamily: "Vazirmatn-Bold" }}
-				className="text-background placeholder:text-background/50 bg-primary rounded-xl w-full p-3"
-				placeholder="اسم آزمون"
-				onChangeText={(newText) => setName(newText)}
-			/>
-			<StyledText className="text-text text-xl mt-3">
-				تعداد سوالات
-			</StyledText>
-			<TextInput
-				style={{ fontFamily: "Vazirmatn-Bold" }}
-				className="text-background placeholder:text-background/50 text-right bg-primary rounded-xl w-full p-3"
-				placeholder={PN.convertEnToPe(105)}
-				keyboardType="numeric"
-				onChangeText={(newValue) => setSize(+newValue)}
-			></TextInput>
-
-			<StyledText className="text-text text-xl mt-3">
-				سوالات ریاضی
-			</StyledText>
-			<View className="flex flex-row-reverse w-full gap-3">
-				<TextInput
-					style={{ fontFamily: "Vazirmatn-Bold" }}
-					className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
-					placeholder={`اولین سوال : ${PN.convertEnToPe(1)}`}
-					keyboardType="numeric"
-					onChangeText={(newValue) => setMathStart(+newValue)}
-				></TextInput>
-				<TextInput
-					style={{ fontFamily: "Vazirmatn-Bold" }}
-					className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
-					placeholder={`آخرین سوال : ${PN.convertEnToPe(40)}`}
-					keyboardType="numeric"
-					onChangeText={(newValue) => setMathEnd(+newValue)}
-				></TextInput>
-			</View>
-
-			<StyledText className="text-text text-xl mt-3">
-				سوالات فیزیک
-			</StyledText>
-			<View className="flex flex-row-reverse w-full gap-3">
-				<TextInput
-					style={{ fontFamily: "Vazirmatn-Bold" }}
-					className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
-					placeholder={`اولین سوال : ${PN.convertEnToPe(41)}`}
-					keyboardType="numeric"
-					onChangeText={(newValue) => setPhysicsStart(+newValue)}
-				></TextInput>
-				<TextInput
-					style={{ fontFamily: "Vazirmatn-Bold" }}
-					className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
-					placeholder={`آخرین سوال : ${PN.convertEnToPe(75)}`}
-					keyboardType="numeric"
-					onChangeText={(newValue) => setPhysicsEnd(+newValue)}
-				></TextInput>
-			</View>
-
-			<StyledText className="text-text text-xl mt-3">
-				سوالات شیمی
-			</StyledText>
-			<View className="flex flex-row-reverse w-full gap-3">
-				<TextInput
-					style={{ fontFamily: "Vazirmatn-Bold" }}
-					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
-					placeholder={`اولین سوال : ${PN.convertEnToPe(76)}`}
-					keyboardType="numeric"
-					onChangeText={(newValue) => setChemistryStart(+newValue)}
-				></TextInput>
-				<TextInput
-					style={{ fontFamily: "Vazirmatn-Bold" }}
-					className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
-					placeholder={`آخرین سوال : ${PN.convertEnToPe(105)}`}
-					keyboardType="numeric"
-					onChangeText={(newValue) => setChemistryEnd(+newValue)}
-				></TextInput>
-			</View>
-
-			<Pressable
-				onPress={() => handleSubmit()}
-				className="bg-accent mt-3 p-3 w-full rounded-xl"
-			>
-				<StyledText className="text-background text-xl text-center">
-					ثبت آزمون
+		<ScrollView
+			showsVerticalScrollIndicator={false}
+			className="bg-background"
+		>
+			<View className="flex-1 items-center bg-background w-full gap-3 px-4 py-20 ">
+				<StyledText className="text-text text-3xl">
+					افزودن آزمون
 				</StyledText>
-			</Pressable>
+				<TextInput
+					style={{ fontFamily: "Vazirmatn-Bold" }}
+					className="text-background placeholder:text-background/50 bg-primary rounded-xl w-full p-3"
+					placeholder="اسم آزمون"
+					onChangeText={(newText) => setName(newText)}
+				/>
+				<StyledText className="text-text text-xl mt-3">
+					تعداد سوالات
+				</StyledText>
+				<TextInput
+					style={{ fontFamily: "Vazirmatn-Bold" }}
+					className="text-background placeholder:text-background/50 text-right bg-primary rounded-xl w-full p-3"
+					placeholder={PN.convertEnToPe(105)}
+					keyboardType="numeric"
+					onChangeText={(newValue) => setSize(+newValue)}
+				></TextInput>
 
-			<StyledText className="text-error text-xl">{error}</StyledText>
-		</View>
+				<StyledText className="text-text text-xl mt-3">
+					سوالات ریاضی
+				</StyledText>
+				<View className="flex flex-row-reverse w-full gap-3">
+					<TextInput
+						style={{ fontFamily: "Vazirmatn-Bold" }}
+						className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
+						placeholder={`اولین سوال : ${PN.convertEnToPe(1)}`}
+						keyboardType="numeric"
+						onChangeText={(newValue) => setMathStart(+newValue)}
+					></TextInput>
+					<TextInput
+						style={{ fontFamily: "Vazirmatn-Bold" }}
+						className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
+						placeholder={`آخرین سوال : ${PN.convertEnToPe(40)}`}
+						keyboardType="numeric"
+						onChangeText={(newValue) => setMathEnd(+newValue)}
+					></TextInput>
+				</View>
+
+				<StyledText className="text-text text-xl mt-3">
+					سوالات فیزیک
+				</StyledText>
+				<View className="flex flex-row-reverse w-full gap-3">
+					<TextInput
+						style={{ fontFamily: "Vazirmatn-Bold" }}
+						className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
+						placeholder={`اولین سوال : ${PN.convertEnToPe(41)}`}
+						keyboardType="numeric"
+						onChangeText={(newValue) => setPhysicsStart(+newValue)}
+					></TextInput>
+					<TextInput
+						style={{ fontFamily: "Vazirmatn-Bold" }}
+						className="text-background placeholder:text-background/50 bg-primary rounded-xl p-3 flex-grow"
+						placeholder={`آخرین سوال : ${PN.convertEnToPe(75)}`}
+						keyboardType="numeric"
+						onChangeText={(newValue) => setPhysicsEnd(+newValue)}
+					></TextInput>
+				</View>
+
+				<StyledText className="text-text text-xl mt-3">
+					سوالات شیمی
+				</StyledText>
+				<View className="flex flex-row-reverse w-full gap-3">
+					<TextInput
+						style={{ fontFamily: "Vazirmatn-Bold" }}
+						className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
+						placeholder={`اولین سوال : ${PN.convertEnToPe(76)}`}
+						keyboardType="numeric"
+						onChangeText={(newValue) =>
+							setChemistryStart(+newValue)
+						}
+					></TextInput>
+					<TextInput
+						style={{ fontFamily: "Vazirmatn-Bold" }}
+						className="text-background placeholder:text-[rgba(29,32,37,0.5)] bg-primary rounded-xl p-3 flex-grow"
+						placeholder={`آخرین سوال : ${PN.convertEnToPe(105)}`}
+						keyboardType="numeric"
+						onChangeText={(newValue) => setChemistryEnd(+newValue)}
+					></TextInput>
+				</View>
+
+				<Pressable
+					onPress={() => handleSubmit()}
+					className="bg-accent mt-3 p-3 w-full rounded-xl"
+				>
+					<StyledText className="text-background text-xl text-center">
+						ثبت آزمون
+					</StyledText>
+				</Pressable>
+
+				<StyledText className="text-error text-xl">{error}</StyledText>
+			</View>
+		</ScrollView>
 	)
 }

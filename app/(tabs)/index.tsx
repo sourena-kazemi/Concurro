@@ -47,10 +47,10 @@ export default function Index() {
 						onPress={() =>
 							router.navigate(`/exam/preview/${exam.id}`)
 						}
-						className="bg-secondary rounded-xl p-4 w-full flex flex-row-reverse justify-between items-center"
+						className="bg-secondary rounded-xl p-4 w-full flex flex-row-reverse justify-between items-center content-center"
 						key={exam.id}
 					>
-						<View className="flex flex-row-reverse gap-3 items-center">
+						<View className="flex flex-row-reverse gap-3 items-center content-center">
 							<StyledText className="text-text text-3xl">{`${PN.convertEnToPe(
 								exam.id
 							)}`}</StyledText>

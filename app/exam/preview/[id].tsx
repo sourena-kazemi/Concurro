@@ -4,7 +4,6 @@ import { useSQLiteContext } from "expo-sqlite"
 import { type examInfo, type questionInfo } from "@/types/types"
 import { useCallback, useState } from "react"
 import AnalyticsViewer from "@/components/analytics/AnalyticsViewer"
-import * as SplashScreen from "expo-splash-screen"
 import StyledText from "@/components/StyledText"
 //@ts-ignore
 import PN from "persian-number"
@@ -53,8 +52,8 @@ export default function Exam() {
 		)
 	}
 	return (
-		<View className="justify-center items-center bg-background px-4 gap-6 py-10">
-			<StyledText className="text-text text-3xl">
+		<View className="flex-1 justify-center items-center bg-background px-4 gap-6 py-10">
+			<StyledText className="text-text text-3xl mt-6">
 				{examInfo?.name}
 			</StyledText>
 			<View className="flex flex-row gap-3">
@@ -88,7 +87,6 @@ export default function Exam() {
 			</Pressable>
 			<Pressable
 				onPress={() => {
-					SplashScreen.preventAutoHideAsync()
 					router.navigate(
 						`/exam/answerSheet/${id}?size=${examInfo?.size}`
 					)

@@ -294,7 +294,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 			}}
 		>
 			<View className="w-full gap-6 py-10">
-				<View className="mt-6 flex-row justify-between items-center flex-wrap gap-3">
+				<View className="mt-6 flex-row-reverse justify-between items-center flex-wrap gap-3">
 					<StyledText className="text-text text-2xl">
 						{title}
 					</StyledText>
