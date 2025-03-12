@@ -9,14 +9,7 @@ import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
 import { router, useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useRef, useState } from "react"
-import {
-	View,
-	Text,
-	ScrollView,
-	Pressable,
-	BackHandler,
-	Share,
-} from "react-native"
+import { View, Text, ScrollView, Pressable, BackHandler } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 import { topics } from "@/constants/topics"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -25,6 +18,8 @@ import Icon from "../icon"
 import * as MediaLibrary from "expo-media-library"
 import { captureRef } from "react-native-view-shot"
 import * as Sharing from "expo-sharing"
+//@ts-ignore
+import PN from "persian-number"
 
 type props = {
 	examId: string
@@ -56,6 +51,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 
 	const [analytics, setAnalytics] = useState<analyticsInfo>()
 	const scrollRef = useRef(null)
+	const tabBarRef = useRef(null)
 	const [currentYPosition, setCurrentYPosition] = useState(0)
 	const [isModalVisible, setIsModalVisible] = useState(false)
 	const [modalMode, setModalMode] = useState<"SUBJECT" | "TOPIC">("SUBJECT")
@@ -328,21 +324,21 @@ export default function AnalyticsViewer({ examId, title }: props) {
 						questionsByExam={
 							questionsBySubject["MATHEMATICS"] || {}
 						}
-						title="MATHEMATICS"
+						title="ریاضیات"
 					/>
 					<AnalyticsBox
 						modalModeHandler={() => setModalMode("SUBJECT")}
 						analyticsHandler={setAnalytics}
 						modalVisibilityHandler={setIsModalVisible}
 						questionsByExam={questionsBySubject["PHYSICS"] || {}}
-						title="PHYSICS"
+						title="فیزیک"
 					/>
 					<AnalyticsBox
 						modalModeHandler={() => setModalMode("SUBJECT")}
 						analyticsHandler={setAnalytics}
 						modalVisibilityHandler={setIsModalVisible}
 						questionsByExam={questionsBySubject["CHEMISTRY"] || {}}
-						title="CHEMISTRY"
+						title="شیمی"
 					/>
 					<View className="gap-3 mt-6">
 						<View className="flex-row gap-3">
@@ -353,7 +349,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								questionsByExam={
 									questionsBySubject["CALCULUS"] || {}
 								}
-								title="CALCULUS"
+								title="حسابان"
 								background="PRIMARY"
 								variation="SMALL"
 								direction="COLUMN"
@@ -365,7 +361,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								questionsByExam={
 									questionsBySubject["GEOMETRY"] || {}
 								}
-								title="GEOMETRY"
+								title="هندسه"
 								background="PRIMARY"
 								variation="SMALL"
 								direction="COLUMN"
@@ -379,7 +375,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								questionsByExam={
 									questionsBySubject["DISCRETE"] || {}
 								}
-								title="DISCRETE"
+								title="گسسته"
 								background="PRIMARY"
 								variation="SMALL"
 								direction="COLUMN"
@@ -391,7 +387,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								questionsByExam={
 									questionsBySubject["STATISTICS"] || {}
 								}
-								title="STATISTICS"
+								title="آمار و احتمال"
 								background="PRIMARY"
 								variation="SMALL"
 								direction="COLUMN"
@@ -406,7 +402,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							questionsByExam={
 								questionsBySubject["CHEMISTRY_MEMO"] || {}
 							}
-							title="CHEMISTRY_MEMO"
+							title="حفظیات شیمی"
 							background="PRIMARY"
 							variation="SMALL"
 							direction="ROW"
@@ -418,7 +414,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							questionsByExam={
 								questionsBySubject["CHEMISTRY_CALC"] || {}
 							}
-							title="CHEMISTRY_CALC"
+							title="محاسباتی و مفهومی شیمی"
 							background="PRIMARY"
 							variation="SMALL"
 							direction="ROW"
@@ -428,8 +424,13 @@ export default function AnalyticsViewer({ examId, title }: props) {
 				<ScrollView
 					horizontal={true}
 					showsHorizontalScrollIndicator={false}
+					ref={tabBarRef}
+					onContentSizeChange={() => {
+						//@ts-ignore
+						tabBarRef.current?.scrollToEnd({ animated: false })
+					}}
 				>
-					<View className="flex-row gap-3 mt-6">
+					<View className="flex-row-reverse gap-3 mt-6">
 						<Pressable
 							className={`rounded-xl grow p-2 ${
 								currentTab === "CALCULUS"
@@ -445,7 +446,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										: "text-background"
 								}`}
 							>
-								CALCULUS
+								حسابان
 							</Text>
 						</Pressable>
 						<Pressable
@@ -463,7 +464,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										: "text-background"
 								}`}
 							>
-								GEOMETRY
+								هندسه
 							</Text>
 						</Pressable>
 						<Pressable
@@ -481,7 +482,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										: "text-background"
 								}`}
 							>
-								DISCRETE
+								گسسته
 							</Text>
 						</Pressable>
 						<Pressable
@@ -499,7 +500,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										: "text-background"
 								}`}
 							>
-								STATISTICS
+								آمار
 							</Text>
 						</Pressable>
 						<Pressable
@@ -517,7 +518,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										: "text-background"
 								}`}
 							>
-								PHYSICS
+								فیزیک
 							</Text>
 						</Pressable>
 						<Pressable
@@ -535,7 +536,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 										: "text-background"
 								}`}
 							>
-								CHEMISTRY
+								شیمی
 							</Text>
 						</Pressable>
 					</View>
@@ -569,31 +570,38 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							</Text>
 							<Text className="text-xl font-bold text-text">
 								{analytics?.percentages.length !== 0
-									? analytics?.averagePercentage
+									? PN.convertEnToPe(
+											analytics?.averagePercentage
+									  ) + "%"
 									: "-"}
-								%
 							</Text>
 						</View>
 						<View className="flex-row items-center justify-between gap-4">
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-								<Text className="text-text">Correct</Text>
+								<Text className="text-text">درست</Text>
 								<Text className="text-accent text-xl">
-									{analytics?.correctQuestionsCount}
+									{PN.convertEnToPe(
+										analytics?.correctQuestionsCount
+									)}
 								</Text>
 							</View>
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-								<Text className="text-text ">Wrong</Text>
+								<Text className="text-text ">نادرست</Text>
 								<Text className="text-error text-xl">
-									{analytics?.wrongQuestionsCount}
+									{PN.convertEnToPe(
+										analytics?.wrongQuestionsCount
+									)}
 								</Text>
 							</View>
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-								<Text className="text-text ">Unanswered</Text>
+								<Text className="text-text ">نزده</Text>
 								<Text className="text-text text-xl">
 									{analytics &&
-										analytics.questionsCount -
-											analytics.correctQuestionsCount -
-											analytics.wrongQuestionsCount}
+										PN.convertEnToPe(
+											analytics.questionsCount -
+												analytics.correctQuestionsCount -
+												analytics.wrongQuestionsCount
+										)}
 								</Text>
 							</View>
 						</View>
@@ -641,27 +649,33 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								!!exam.questions.length && (
 									<View key={exam.id} className="gap-3">
 										{analytics.percentages.length > 1 && (
-											<Text className="text-text text-3xl">
+											<Text className="text-text text-3xl text-right">
 												{exam.name}
 											</Text>
 										)}
 										{exam.questions.map((question) => (
 											<View
 												key={question.number}
-												className="flex-row bg-secondary p-4 rounded-xl justify-between items-center"
+												className="flex-row-reverse bg-secondary p-4 rounded-xl justify-between items-center"
 											>
-												<View className="flex-row gap-3">
+												<View className="flex-row-reverse gap-3">
 													<Text className="text-text text-3xl">
-														{question.number}
+														{PN.convertEnToPe(
+															question.number
+														)}
 													</Text>
 													<Text className="text-text text-xl">
 														{modalMode ===
 															"SUBJECT" &&
-															question.topic}
+															topics[
+																question.topic
+															]}
 													</Text>
 												</View>
-												<Text className="text-background">
-													{question.status}
+												<Text className="text-background text-lg">
+													{question.status === "WRONG"
+														? "نادرست"
+														: "نزده"}
 												</Text>
 											</View>
 										))}

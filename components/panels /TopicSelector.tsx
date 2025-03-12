@@ -48,7 +48,9 @@ export default function TopicSelector({
 				className={`p-3 rounded-xl
 				${isTopicSelected ? "bg-accent" : "bg-text opacity-50"}`}
 			>
-				<Text className="text-center text-xl text-text">Next</Text>
+				<Text className="text-center text-xl text-background">
+					بعدی
+				</Text>
 			</Pressable>
 		</View>
 	)

@@ -4,6 +4,8 @@ import { useSQLiteContext } from "expo-sqlite"
 import { type examInfo, type questionInfo } from "@/types/types"
 import { useCallback, useState } from "react"
 import AnalyticsViewer from "@/components/analytics/AnalyticsViewer"
+//@ts-ignore
+import PN from "persian-number"
 
 export default function Exam() {
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -53,9 +55,14 @@ export default function Exam() {
 			<Text className="text-text text-3xl">{examInfo?.name}</Text>
 			<View className="flex flex-row gap-3">
 				<Text className="text-text text-xl">
-					<Text className="text-accent">{examInfo?.size}</Text>{" "}
-					Questions,{" "}
-					<Text className="text-accent">{lastQuestion}</Text> set
+					<Text className="text-accent">
+						{PN.convertEnToPe(examInfo?.size)}
+					</Text>
+					سوال،{" "}
+					<Text className="text-accent">
+						{PN.convertEnToPe(lastQuestion)}
+					</Text>{" "}
+					ثبت شده
 				</Text>
 			</View>
 			<Pressable
@@ -72,7 +79,7 @@ export default function Exam() {
 				}`}
 			>
 				<Text className="text-background text-center text-xl">
-					Update
+					ثبت سوالات
 				</Text>
 			</Pressable>
 			<Pressable
@@ -89,7 +96,7 @@ export default function Exam() {
 				}`}
 			>
 				<Text className="text-background text-center text-xl">
-					Answer Sheet
+					پاسخ برگ
 				</Text>
 			</Pressable>
 		</View>

@@ -1,6 +1,8 @@
 import { type questionStatus } from "@/types/types"
 import { useState } from "react"
 import { Pressable, View, Text, Button } from "react-native"
+//@ts-ignore
+import PN from "persian-number"
 
 type props = {
 	statusHandler: React.Dispatch<React.SetStateAction<questionStatus>>
@@ -27,28 +29,36 @@ export default function StatusSelector({
 									: "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">1</Text>
+							<Text className="text-text text-center">
+								{PN.convertEnToPe(1)}
+							</Text>
 						</View>
 						<View
 							className={`${
 								answer === 2 ? "bg-text/50" : "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">2</Text>
+							<Text className="text-text text-center">
+								{PN.convertEnToPe(2)}
+							</Text>
 						</View>
 						<View
 							className={`${
 								answer === 3 ? "bg-text/50" : "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">3</Text>
+							<Text className="text-text text-center">
+								{PN.convertEnToPe(3)}
+							</Text>
 						</View>
 						<View
 							className={`${
 								answer === 4 ? "bg-text/50" : "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">4</Text>
+							<Text className="text-text text-center">
+								{PN.convertEnToPe(4)}
+							</Text>
 						</View>
 					</View>
 				</View>
@@ -64,13 +74,13 @@ export default function StatusSelector({
 				}}
 			>
 				<Text
-					className={`text-xl ${
+					className={`text-xl text-right ${
 						currentStatus === "CORRECT"
 							? "text-background"
 							: "text-text"
 					}`}
 				>
-					Correct
+					درست
 				</Text>
 			</Pressable>
 			<Pressable
@@ -84,13 +94,13 @@ export default function StatusSelector({
 				}}
 			>
 				<Text
-					className={`text-xl ${
+					className={`text-xl text-right ${
 						currentStatus === "WRONG"
 							? "text-background"
 							: "text-text"
 					}`}
 				>
-					Wrong
+					نادرست
 				</Text>
 			</Pressable>
 			<Pressable
@@ -106,13 +116,13 @@ export default function StatusSelector({
 				}}
 			>
 				<Text
-					className={`text-xl ${
+					className={`text-xl text-right ${
 						currentStatus === "UNANSWERED"
 							? "text-background"
 							: "text-text"
 					}`}
 				>
-					Unanswered
+					نزده
 				</Text>
 			</Pressable>
 			<Pressable
@@ -122,7 +132,9 @@ export default function StatusSelector({
 					isStatusSelected ? "bg-accent" : "bg-text opacity-50"
 				}`}
 			>
-				<Text className="text-center text-xl text-text">Next</Text>
+				<Text className="text-center text-xl text-background">
+					بعدی
+				</Text>
 			</Pressable>
 		</View>
 	)

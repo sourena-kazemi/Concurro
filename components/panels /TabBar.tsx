@@ -9,7 +9,7 @@ type props = {
 }
 export default function TabBar({ layout, tabHandler, tab: currentTab }: props) {
 	return (
-		<View className="flex flex-row gap-3 w-full items-center">
+		<View className="flex flex-row-reverse gap-3 w-full items-center">
 			{layout.map((tab, index) => (
 				<Pressable
 					key={index}

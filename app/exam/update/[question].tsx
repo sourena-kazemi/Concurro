@@ -12,6 +12,8 @@ import { useCallback, useState } from "react"
 import MathPanel from "@/components/panels /MathPanel"
 import PhysicsPanel from "@/components/panels /PhysicsPanel"
 import ChemistryPanel from "@/components/panels /ChemistryPanel"
+//@ts-ignore
+import PN from "persian-number"
 
 export default function Exam() {
 	const { question, exam } = useLocalSearchParams<{
@@ -104,8 +106,16 @@ export default function Exam() {
 			className="bg-background"
 		>
 			<View className="flex1 px-4 py-20 justify-center items-center gap-6">
-				<Text className="text-text text-6xl">{question}</Text>
-				<Text className="text-text text-xl">{previewSubject}</Text>
+				<Text className="text-text text-6xl">
+					{PN.convertEnToPe(question)}
+				</Text>
+				<Text className="text-text text-2xl">
+					{previewSubject === "MATHEMATICS"
+						? "ریاضیات"
+						: previewSubject === "PHYSICS"
+						? "فیزیک"
+						: "شیمی"}
+				</Text>
 				{previewSubject === "MATHEMATICS" && (
 					<MathPanel
 						storeHandler={storeQuestionInDB}

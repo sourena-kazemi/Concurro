@@ -5,7 +5,7 @@ import AnalyticsViewer from "@/components/analytics/AnalyticsViewer"
 export default function Analytics() {
 	return (
 		<View className="flex-1 w-full bg-background px-4">
-			<AnalyticsViewer examId="*" title="All" />
+			<AnalyticsViewer examId="*" title="همه آزمون ها" />
 		</View>
 	)
 }

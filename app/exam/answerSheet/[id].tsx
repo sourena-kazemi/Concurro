@@ -3,6 +3,8 @@ import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useReducer, useRef } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { type answer } from "@/types/types"
+//@ts-ignore
+import PN from "persian-number"
 
 type answers = {
 	[key: number]: number
@@ -47,22 +49,23 @@ export default function AnswerSheet() {
 			})
 		}
 		if (type === "SET") {
-			optionsRef.current.get(number * 10 + 1).setNativeProps({
-				style: { backgroundColor: "rgba(29,32,37,0.5)" },
-			})
-			optionsRef.current.get(number * 10 + 2).setNativeProps({
-				style: { backgroundColor: "rgba(29,32,37,0.5)" },
-			})
-			optionsRef.current.get(number * 10 + 3).setNativeProps({
-				style: { backgroundColor: "rgba(29,32,37,0.5)" },
-			})
-			optionsRef.current.get(number * 10 + 4).setNativeProps({
-				style: { backgroundColor: "rgba(29,32,37,0.5)" },
-			})
-
-			optionsRef.current.get(number * 10 + choice).setNativeProps({
-				style: { backgroundColor: "rgba(150,212,190,0.5)" },
-			})
+			;[1, 2, 3, 4].map((option) =>
+				option === choice
+					? optionsRef.current
+							.get(number * 10 + option)
+							.setNativeProps({
+								style: {
+									backgroundColor: "rgba(150,212,190,0.5)",
+								},
+							})
+					: optionsRef.current
+							.get(number * 10 + option)
+							.setNativeProps({
+								style: {
+									backgroundColor: "rgba(29,32,37,0.5)",
+								},
+							})
+			)
 		}
 	}
 
@@ -129,7 +132,7 @@ export default function AnswerSheet() {
 							key={index}
 						>
 							<Text className="text-text text-xl">
-								{index + 1}
+								{PN.convertEnToPe(index + 1)}
 							</Text>
 							<View className="flex-row gap-1 w-3/4">
 								<Pressable
@@ -149,7 +152,7 @@ export default function AnswerSheet() {
 									}
 								>
 									<Text className="text-text text-center">
-										1
+										{PN.convertEnToPe(1)}
 									</Text>
 								</Pressable>
 								<Pressable
@@ -169,7 +172,7 @@ export default function AnswerSheet() {
 									}
 								>
 									<Text className="text-text text-center">
-										2
+										{PN.convertEnToPe(2)}
 									</Text>
 								</Pressable>
 								<Pressable
@@ -189,7 +192,7 @@ export default function AnswerSheet() {
 									}
 								>
 									<Text className="text-text text-center">
-										3
+										{PN.convertEnToPe(3)}
 									</Text>
 								</Pressable>
 								<Pressable
@@ -209,7 +212,7 @@ export default function AnswerSheet() {
 									}
 								>
 									<Text className="text-text text-center">
-										4
+										{PN.convertEnToPe(4)}
 									</Text>
 								</Pressable>
 							</View>

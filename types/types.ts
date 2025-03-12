@@ -1,7 +1,7 @@
 import { topics } from "@/constants/topics"
 
 export type examStatus = "CREATED" | "IN-PROGRESS" | "COMPLETED"
-type examStatusPreview = "CREATED" | "IN-PROGRESS" | "COMPLETED"
+type examStatusPreview = "جدید" | "در حال تکمیل" | "تکمیل شده"
 
 export type examInfo = {
 	id: number

@@ -3,6 +3,8 @@ import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
 import { Link, router, useFocusEffect } from "expo-router"
 import { examInfo, examPreview } from "@/types/types"
+//@ts-ignore
+import PN from "persian-number"
 
 export default function Index() {
 	const db = useSQLiteContext()
@@ -18,10 +20,10 @@ export default function Index() {
 				name: exam.name,
 				status:
 					exam.status === "CREATED"
-						? "CREATED"
+						? "جدید"
 						: exam.status === "COMPLETED"
-						? "COMPLETED"
-						: "IN-PROGRESS",
+						? "تکمیل شده"
+						: "در حال تکمیل",
 			})
 		)
 		setExams(previewInfo)
@@ -41,14 +43,18 @@ export default function Index() {
 						onPress={() =>
 							router.navigate(`/exam/preview/${exam.id}`)
 						}
-						className="bg-secondary rounded-xl p-4 w-full flex flex-row justify-between items-center"
+						className="bg-secondary rounded-xl p-4 w-full flex flex-row-reverse justify-between items-center"
 						key={exam.id}
 					>
-						<View className="flex flex-row gap-3 items-center">
-							<Text className="text-text text-3xl">{`${exam.id}`}</Text>
-							<Text className="text-text text-xl font-bold">{`${exam.name}`}</Text>
+						<View className="flex flex-row-reverse gap-3 items-center">
+							<Text className="text-text text-3xl">{`${PN.convertEnToPe(
+								exam.id
+							)}`}</Text>
+							<Text className="text-text text-xl font-bold text-right">{`${exam.name}`}</Text>
 						</View>
-						<Text className="text-background">{exam.status}</Text>
+						<Text className="text-background text-lg font-bold text-right">
+							{exam.status}
+						</Text>
 					</Pressable>
 				))}
 			</View>

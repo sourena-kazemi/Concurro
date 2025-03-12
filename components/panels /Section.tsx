@@ -33,7 +33,7 @@ export default function Section({
 					}`}
 				>
 					<Text
-						className={`text-xl ${
+						className={`text-xl text-right ${
 							currentTopic === topic
 								? "text-background"
 								: "text-text"

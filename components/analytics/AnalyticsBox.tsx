@@ -7,6 +7,8 @@ import {
 import { useFocusEffect } from "expo-router"
 import { useCallback, useState } from "react"
 import { View, Text, Pressable } from "react-native"
+//@ts-ignore
+import PN from "persian-number"
 
 type questionsByExam = {
 	[key: number]: { name: string; id: number; questions: questionInfo[] }
@@ -162,7 +164,7 @@ export default function AnalyticsBox({
 		>
 			<View
 				className={`justify-between items-center ${
-					direction === "ROW" ? "flex-row" : "flex-col gap-3"
+					direction === "ROW" ? "flex-row-reverse" : "flex-col gap-3"
 				}`}
 			>
 				<Text
@@ -181,29 +183,33 @@ export default function AnalyticsBox({
 							: "text-secondary"
 					}`}
 				>
-					{percentages.length !== 0 ? averagePercentage : "-"}%
+					{percentages.length !== 0
+						? PN.convertEnToPe(averagePercentage) + "%"
+						: "-"}
 				</Text>
 			</View>
 			{variation !== "SMALL" && (
 				<View className="flex-row items-center justify-between gap-4">
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-						<Text className="text-text">Correct</Text>
+						<Text className="text-text">درست</Text>
 						<Text className="text-accent text-xl">
-							{correctQuestionsCount}
+							{PN.convertEnToPe(correctQuestionsCount)}
 						</Text>
 					</View>
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-						<Text className="text-text ">Wrong</Text>
+						<Text className="text-text ">نادرست</Text>
 						<Text className="text-error text-xl">
-							{wrongQuestionsCount}
+							{PN.convertEnToPe(wrongQuestionsCount)}
 						</Text>
 					</View>
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-						<Text className="text-text ">Unanswered</Text>
+						<Text className="text-text ">نزده</Text>
 						<Text className="text-text text-xl">
-							{questionsCount -
-								correctQuestionsCount -
-								wrongQuestionsCount}
+							{PN.convertEnToPe(
+								questionsCount -
+									correctQuestionsCount -
+									wrongQuestionsCount
+							)}
 						</Text>
 					</View>
 				</View>
