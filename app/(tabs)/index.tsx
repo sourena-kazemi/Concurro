@@ -37,8 +37,11 @@ export default function Index() {
 	)
 
 	return (
-		<ScrollView showsVerticalScrollIndicator={false}>
-			<View className="flex-1 flex-col-reverse bg-background w-full px-4 gap-3 justify-end py-20">
+		<ScrollView
+			showsVerticalScrollIndicator={false}
+			className="bg-background"
+		>
+			<View className="flex-1 flex-col-reverse w-full px-4 gap-3 justify-end py-20">
 				{exams.map((exam) => (
 					<Pressable
 						onPress={() =>

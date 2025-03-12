@@ -190,7 +190,7 @@ export default function AnalyticsBox({
 				</StyledText>
 			</View>
 			{variation !== "SMALL" && (
-				<View className="flex-row items-center justify-between gap-4">
+				<View className="flex-row-reverse items-center justify-between gap-4">
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
 						<StyledText className="text-text">درست</StyledText>
 						<StyledText className="text-accent text-xl">

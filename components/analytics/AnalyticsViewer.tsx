@@ -567,7 +567,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 			>
 				<View className="py-10 gap-6">
 					<View className="rounded-xl p-4 gap-4 bg-secondary">
-						<View className="justify-between items-center flex-row ">
+						<View className="justify-between items-center flex-row-reverse ">
 							<StyledText className="text-2xl font-bold text-text">
 								{analytics?.title}
 							</StyledText>
@@ -579,7 +579,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 									: "-"}
 							</StyledText>
 						</View>
-						<View className="flex-row items-center justify-between gap-4">
+						<View className="flex-row-reverse items-center justify-between gap-4">
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
 								<StyledText className="text-text">
 									درست
@@ -657,11 +657,9 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							(exam) =>
 								!!exam.questions.length && (
 									<View key={exam.id} className="gap-3">
-										{analytics.percentages.length > 1 && (
-											<StyledText className="text-text text-3xl text-right">
-												{exam.name}
-											</StyledText>
-										)}
+										<StyledText className="text-text text-3xl text-right">
+											{exam.name}
+										</StyledText>
 										{exam.questions.map((question) => (
 											<View
 												key={question.number}

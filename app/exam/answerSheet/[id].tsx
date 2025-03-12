@@ -3,6 +3,7 @@ import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useReducer, useRef } from "react"
 import { View, ScrollView, Pressable } from "react-native"
 import { type answer } from "@/types/types"
+import * as SplashScreen from "expo-splash-screen"
 import StyledText from "@/components/StyledText"
 //@ts-ignore
 import PN from "persian-number"
@@ -30,6 +31,8 @@ function reducer(state: answers, action: reducerAction): answers {
 	}
 	throw Error("Unknown action")
 }
+
+// SplashScreen.preventAutoHideAsync()
 
 export default function AnswerSheet() {
 	const { id, size } = useLocalSearchParams<{ id: string; size?: string }>()
@@ -119,11 +122,15 @@ export default function AnswerSheet() {
 			setBackgroundColors(+question, choice, "SET")
 		}
 	}, [answers])
+	const onLayoutRootView = () => {
+		SplashScreen.hide()
+	}
 
 	return (
 		<ScrollView
 			showsVerticalScrollIndicator={false}
 			className="bg-background"
+			onLayout={onLayoutRootView}
 		>
 			<View className="flex-1 px-4 py-20 gap-3">
 				{size &&
