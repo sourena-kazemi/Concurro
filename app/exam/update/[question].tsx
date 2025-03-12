@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native"
+import { ScrollView, View } from "react-native"
 import { useFocusEffect, useLocalSearchParams, router } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import {
@@ -12,6 +12,7 @@ import { useCallback, useState } from "react"
 import MathPanel from "@/components/panels /MathPanel"
 import PhysicsPanel from "@/components/panels /PhysicsPanel"
 import ChemistryPanel from "@/components/panels /ChemistryPanel"
+import StyledText from "@/components/StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -106,16 +107,16 @@ export default function Exam() {
 			className="bg-background"
 		>
 			<View className="flex1 px-4 py-20 justify-center items-center gap-6">
-				<Text className="text-text text-6xl">
+				<StyledText className="text-text text-6xl">
 					{PN.convertEnToPe(question)}
-				</Text>
-				<Text className="text-text text-2xl">
+				</StyledText>
+				<StyledText className="text-text text-2xl">
 					{previewSubject === "MATHEMATICS"
 						? "ریاضیات"
 						: previewSubject === "PHYSICS"
 						? "فیزیک"
 						: "شیمی"}
-				</Text>
+				</StyledText>
 				{previewSubject === "MATHEMATICS" && (
 					<MathPanel
 						storeHandler={storeQuestionInDB}

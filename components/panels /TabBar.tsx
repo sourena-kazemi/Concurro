@@ -1,6 +1,6 @@
 import { type layout } from "@/types/types"
-import { useState } from "react"
-import { Pressable, View, Text } from "react-native"
+import { Pressable, View } from "react-native"
+import StyledText from "../StyledText"
 
 type props = {
 	layout: layout
@@ -20,7 +20,7 @@ export default function TabBar({ layout, tabHandler, tab: currentTab }: props) {
 							: "bg-primary"
 					}`}
 				>
-					<Text
+					<StyledText
 						className={`text-center text-xl ${
 							currentTab === tab.name
 								? "text-primary"
@@ -28,7 +28,7 @@ export default function TabBar({ layout, tabHandler, tab: currentTab }: props) {
 						}`}
 					>
 						{tab.previewName}
-					</Text>
+					</StyledText>
 				</Pressable>
 			))}
 		</View>

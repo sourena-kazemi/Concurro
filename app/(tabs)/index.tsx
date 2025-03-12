@@ -1,8 +1,9 @@
-import { Pressable, ScrollView, Text, View } from "react-native"
+import { Pressable, ScrollView, View } from "react-native"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
-import { Link, router, useFocusEffect } from "expo-router"
+import { router, useFocusEffect } from "expo-router"
 import { examInfo, examPreview } from "@/types/types"
+import StyledText from "@/components/StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -47,14 +48,14 @@ export default function Index() {
 						key={exam.id}
 					>
 						<View className="flex flex-row-reverse gap-3 items-center">
-							<Text className="text-text text-3xl">{`${PN.convertEnToPe(
+							<StyledText className="text-text text-3xl">{`${PN.convertEnToPe(
 								exam.id
-							)}`}</Text>
-							<Text className="text-text text-xl font-bold text-right">{`${exam.name}`}</Text>
+							)}`}</StyledText>
+							<StyledText className="text-text text-xl font-bold text-right">{`${exam.name}`}</StyledText>
 						</View>
-						<Text className="text-background text-lg font-bold text-right">
+						<StyledText className="text-background text-lg font-bold text-right">
 							{exam.status}
-						</Text>
+						</StyledText>
 					</Pressable>
 				))}
 			</View>

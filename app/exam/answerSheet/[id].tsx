@@ -1,8 +1,9 @@
 import { useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useReducer, useRef } from "react"
-import { View, Text, ScrollView, Pressable } from "react-native"
+import { View, ScrollView, Pressable } from "react-native"
 import { type answer } from "@/types/types"
+import StyledText from "@/components/StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -131,9 +132,9 @@ export default function AnswerSheet() {
 							className="bg-secondary rounded-xl px-4 py-2 w-full flex-row justify-between items-center gap-1"
 							key={index}
 						>
-							<Text className="text-text text-xl">
+							<StyledText className="text-text text-xl">
 								{PN.convertEnToPe(index + 1)}
-							</Text>
+							</StyledText>
 							<View className="flex-row gap-1 w-3/4">
 								<Pressable
 									onPress={() =>
@@ -151,9 +152,9 @@ export default function AnswerSheet() {
 											  )
 									}
 								>
-									<Text className="text-text text-center">
+									<StyledText className="text-text text-center">
 										{PN.convertEnToPe(1)}
-									</Text>
+									</StyledText>
 								</Pressable>
 								<Pressable
 									onPress={() =>
@@ -171,9 +172,9 @@ export default function AnswerSheet() {
 											  )
 									}
 								>
-									<Text className="text-text text-center">
+									<StyledText className="text-text text-center">
 										{PN.convertEnToPe(2)}
-									</Text>
+									</StyledText>
 								</Pressable>
 								<Pressable
 									onPress={() =>
@@ -191,9 +192,9 @@ export default function AnswerSheet() {
 											  )
 									}
 								>
-									<Text className="text-text text-center">
+									<StyledText className="text-text text-center">
 										{PN.convertEnToPe(3)}
-									</Text>
+									</StyledText>
 								</Pressable>
 								<Pressable
 									onPress={() =>
@@ -211,9 +212,9 @@ export default function AnswerSheet() {
 											  )
 									}
 								>
-									<Text className="text-text text-center">
+									<StyledText className="text-text text-center">
 										{PN.convertEnToPe(4)}
-									</Text>
+									</StyledText>
 								</Pressable>
 							</View>
 						</View>

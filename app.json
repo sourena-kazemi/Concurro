@@ -25,7 +25,8 @@
 					"image": "./assets/images/icon.png"
 				}
 			],
-			"expo-sqlite"
+			"expo-sqlite",
+			["expo-font", { "fonts": ["./assets/fonts/Vazirmatn-Bold.ttf"] }]
 		],
 		"experiments": {
 			"typedRoutes": true

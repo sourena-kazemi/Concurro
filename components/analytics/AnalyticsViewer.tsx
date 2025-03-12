@@ -9,15 +9,16 @@ import { mathLayout, physicsLayout, chemistryLayout } from "@/constants/layouts"
 import { router, useFocusEffect } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { View, Text, ScrollView, Pressable, BackHandler } from "react-native"
+import { View, ScrollView, Pressable, BackHandler } from "react-native"
 import AnalyticsBox from "./AnalyticsBox"
 import { topics } from "@/constants/topics"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { LineChart } from "react-native-chart-kit"
-import Icon from "../icon"
+import Icon from "../Icon"
 import * as MediaLibrary from "expo-media-library"
 import { captureRef } from "react-native-view-shot"
 import * as Sharing from "expo-sharing"
+import StyledText from "../StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -294,7 +295,9 @@ export default function AnalyticsViewer({ examId, title }: props) {
 		>
 			<View className="w-full gap-6 py-10">
 				<View className="mt-6 flex-row justify-between items-center flex-wrap gap-3">
-					<Text className="text-text text-2xl">{title}</Text>
+					<StyledText className="text-text text-2xl">
+						{title}
+					</StyledText>
 					<View className="flex-row gap-3 items-center justify-end grow">
 						{examId !== "*" && (
 							<Pressable
@@ -439,7 +442,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							}`}
 							onPress={() => setCurrentTab("CALCULUS")}
 						>
-							<Text
+							<StyledText
 								className={`text-center text-xl ${
 									currentTab === "CALCULUS"
 										? "text-primary"
@@ -447,7 +450,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								}`}
 							>
 								حسابان
-							</Text>
+							</StyledText>
 						</Pressable>
 						<Pressable
 							className={`rounded-xl grow p-2 ${
@@ -457,7 +460,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							}`}
 							onPress={() => setCurrentTab("GEOMETRY")}
 						>
-							<Text
+							<StyledText
 								className={`text-center text-xl ${
 									currentTab === "GEOMETRY"
 										? "text-primary"
@@ -465,7 +468,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								}`}
 							>
 								هندسه
-							</Text>
+							</StyledText>
 						</Pressable>
 						<Pressable
 							className={`rounded-xl grow p-2 ${
@@ -475,7 +478,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							}`}
 							onPress={() => setCurrentTab("DISCRETE")}
 						>
-							<Text
+							<StyledText
 								className={`text-center text-xl ${
 									currentTab === "DISCRETE"
 										? "text-primary"
@@ -483,7 +486,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								}`}
 							>
 								گسسته
-							</Text>
+							</StyledText>
 						</Pressable>
 						<Pressable
 							className={`rounded-xl grow p-2 ${
@@ -493,7 +496,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							}`}
 							onPress={() => setCurrentTab("STATISTICS")}
 						>
-							<Text
+							<StyledText
 								className={`text-center text-xl ${
 									currentTab === "STATISTICS"
 										? "text-primary"
@@ -501,7 +504,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								}`}
 							>
 								آمار
-							</Text>
+							</StyledText>
 						</Pressable>
 						<Pressable
 							className={`rounded-xl grow p-2 ${
@@ -511,7 +514,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							}`}
 							onPress={() => setCurrentTab("PHYSICS")}
 						>
-							<Text
+							<StyledText
 								className={`text-center text-xl ${
 									currentTab === "PHYSICS"
 										? "text-primary"
@@ -519,7 +522,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								}`}
 							>
 								فیزیک
-							</Text>
+							</StyledText>
 						</Pressable>
 						<Pressable
 							className={`rounded-xl grow p-2 ${
@@ -529,7 +532,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 							}`}
 							onPress={() => setCurrentTab("CHEMISTRY")}
 						>
-							<Text
+							<StyledText
 								className={`text-center text-xl ${
 									currentTab === "CHEMISTRY"
 										? "text-primary"
@@ -537,7 +540,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								}`}
 							>
 								شیمی
-							</Text>
+							</StyledText>
 						</Pressable>
 					</View>
 				</ScrollView>
@@ -565,44 +568,50 @@ export default function AnalyticsViewer({ examId, title }: props) {
 				<View className="py-10 gap-6">
 					<View className="rounded-xl p-4 gap-4 bg-secondary">
 						<View className="justify-between items-center flex-row ">
-							<Text className="text-2xl font-bold text-text">
+							<StyledText className="text-2xl font-bold text-text">
 								{analytics?.title}
-							</Text>
-							<Text className="text-xl font-bold text-text">
+							</StyledText>
+							<StyledText className="text-xl font-bold text-text">
 								{analytics?.percentages.length !== 0
 									? PN.convertEnToPe(
 											analytics?.averagePercentage
 									  ) + "%"
 									: "-"}
-							</Text>
+							</StyledText>
 						</View>
 						<View className="flex-row items-center justify-between gap-4">
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-								<Text className="text-text">درست</Text>
-								<Text className="text-accent text-xl">
+								<StyledText className="text-text">
+									درست
+								</StyledText>
+								<StyledText className="text-accent text-xl">
 									{PN.convertEnToPe(
 										analytics?.correctQuestionsCount
 									)}
-								</Text>
+								</StyledText>
 							</View>
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-								<Text className="text-text ">نادرست</Text>
-								<Text className="text-error text-xl">
+								<StyledText className="text-text ">
+									نادرست
+								</StyledText>
+								<StyledText className="text-error text-xl">
 									{PN.convertEnToPe(
 										analytics?.wrongQuestionsCount
 									)}
-								</Text>
+								</StyledText>
 							</View>
 							<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-								<Text className="text-text ">نزده</Text>
-								<Text className="text-text text-xl">
+								<StyledText className="text-text ">
+									نزده
+								</StyledText>
+								<StyledText className="text-text text-xl">
 									{analytics &&
 										PN.convertEnToPe(
 											analytics.questionsCount -
 												analytics.correctQuestionsCount -
 												analytics.wrongQuestionsCount
 										)}
-								</Text>
+								</StyledText>
 							</View>
 						</View>
 					</View>
@@ -649,9 +658,9 @@ export default function AnalyticsViewer({ examId, title }: props) {
 								!!exam.questions.length && (
 									<View key={exam.id} className="gap-3">
 										{analytics.percentages.length > 1 && (
-											<Text className="text-text text-3xl text-right">
+											<StyledText className="text-text text-3xl text-right">
 												{exam.name}
-											</Text>
+											</StyledText>
 										)}
 										{exam.questions.map((question) => (
 											<View
@@ -659,24 +668,24 @@ export default function AnalyticsViewer({ examId, title }: props) {
 												className="flex-row-reverse bg-secondary p-4 rounded-xl justify-between items-center"
 											>
 												<View className="flex-row-reverse gap-3">
-													<Text className="text-text text-3xl">
+													<StyledText className="text-text text-3xl">
 														{PN.convertEnToPe(
 															question.number
 														)}
-													</Text>
-													<Text className="text-text text-xl">
+													</StyledText>
+													<StyledText className="text-text text-xl">
 														{modalMode ===
 															"SUBJECT" &&
 															topics[
 																question.topic
 															]}
-													</Text>
+													</StyledText>
 												</View>
-												<Text className="text-background text-lg">
+												<StyledText className="text-background text-lg">
 													{question.status === "WRONG"
 														? "نادرست"
 														: "نزده"}
-												</Text>
+												</StyledText>
 											</View>
 										))}
 									</View>

@@ -1,8 +1,9 @@
 import TabBar from "./TabBar"
 import Section from "./Section"
 import { layout, section } from "@/types/types"
-import { Pressable, View, Text } from "react-native"
+import { Pressable, View } from "react-native"
 import { useState } from "react"
+import StyledText from "../StyledText"
 
 type props = {
 	layout: layout
@@ -48,9 +49,9 @@ export default function TopicSelector({
 				className={`p-3 rounded-xl
 				${isTopicSelected ? "bg-accent" : "bg-text opacity-50"}`}
 			>
-				<Text className="text-center text-xl text-background">
+				<StyledText className="text-center text-xl text-background">
 					بعدی
-				</Text>
+				</StyledText>
 			</Pressable>
 		</View>
 	)

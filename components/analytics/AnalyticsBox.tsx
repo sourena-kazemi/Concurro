@@ -6,7 +6,8 @@ import {
 } from "@/types/types"
 import { useFocusEffect } from "expo-router"
 import { useCallback, useState } from "react"
-import { View, Text, Pressable } from "react-native"
+import { View, Pressable } from "react-native"
+import StyledText from "../StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -167,7 +168,7 @@ export default function AnalyticsBox({
 					direction === "ROW" ? "flex-row-reverse" : "flex-col gap-3"
 				}`}
 			>
-				<Text
+				<StyledText
 					className={`text-2xl font-bold ${
 						background === "SECONDARY"
 							? "text-text"
@@ -175,8 +176,8 @@ export default function AnalyticsBox({
 					}`}
 				>
 					{title}
-				</Text>
-				<Text
+				</StyledText>
+				<StyledText
 					className={`text-xl font-bold ${
 						background === "SECONDARY"
 							? "text-text"
@@ -186,31 +187,31 @@ export default function AnalyticsBox({
 					{percentages.length !== 0
 						? PN.convertEnToPe(averagePercentage) + "%"
 						: "-"}
-				</Text>
+				</StyledText>
 			</View>
 			{variation !== "SMALL" && (
 				<View className="flex-row items-center justify-between gap-4">
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-						<Text className="text-text">درست</Text>
-						<Text className="text-accent text-xl">
+						<StyledText className="text-text">درست</StyledText>
+						<StyledText className="text-accent text-xl">
 							{PN.convertEnToPe(correctQuestionsCount)}
-						</Text>
+						</StyledText>
 					</View>
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-						<Text className="text-text ">نادرست</Text>
-						<Text className="text-error text-xl">
+						<StyledText className="text-text ">نادرست</StyledText>
+						<StyledText className="text-error text-xl">
 							{PN.convertEnToPe(wrongQuestionsCount)}
-						</Text>
+						</StyledText>
 					</View>
 					<View className="bg-background/50 p-3 rounded-xl items-center gap-1 grow">
-						<Text className="text-text ">نزده</Text>
-						<Text className="text-text text-xl">
+						<StyledText className="text-text ">نزده</StyledText>
+						<StyledText className="text-text text-xl">
 							{PN.convertEnToPe(
 								questionsCount -
 									correctQuestionsCount -
 									wrongQuestionsCount
 							)}
-						</Text>
+						</StyledText>
 					</View>
 				</View>
 			)}

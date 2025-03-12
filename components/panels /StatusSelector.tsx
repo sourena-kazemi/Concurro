@@ -1,6 +1,7 @@
 import { type questionStatus } from "@/types/types"
 import { useState } from "react"
-import { Pressable, View, Text, Button } from "react-native"
+import { Pressable, View } from "react-native"
+import StyledText from "../StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -29,36 +30,36 @@ export default function StatusSelector({
 									: "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">
+							<StyledText className="text-text text-center">
 								{PN.convertEnToPe(1)}
-							</Text>
+							</StyledText>
 						</View>
 						<View
 							className={`${
 								answer === 2 ? "bg-text/50" : "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">
+							<StyledText className="text-text text-center">
 								{PN.convertEnToPe(2)}
-							</Text>
+							</StyledText>
 						</View>
 						<View
 							className={`${
 								answer === 3 ? "bg-text/50" : "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">
+							<StyledText className="text-text text-center">
 								{PN.convertEnToPe(3)}
-							</Text>
+							</StyledText>
 						</View>
 						<View
 							className={`${
 								answer === 4 ? "bg-text/50" : "bg-background/50"
 							} rounded-xl p-3 grow`}
 						>
-							<Text className="text-text text-center">
+							<StyledText className="text-text text-center">
 								{PN.convertEnToPe(4)}
-							</Text>
+							</StyledText>
 						</View>
 					</View>
 				</View>
@@ -73,7 +74,7 @@ export default function StatusSelector({
 					setIsStatusSelected(true)
 				}}
 			>
-				<Text
+				<StyledText
 					className={`text-xl text-right ${
 						currentStatus === "CORRECT"
 							? "text-background"
@@ -81,7 +82,7 @@ export default function StatusSelector({
 					}`}
 				>
 					درست
-				</Text>
+				</StyledText>
 			</Pressable>
 			<Pressable
 				className={`rounded-xl p-4 ${
@@ -93,7 +94,7 @@ export default function StatusSelector({
 					setIsStatusSelected(true)
 				}}
 			>
-				<Text
+				<StyledText
 					className={`text-xl text-right ${
 						currentStatus === "WRONG"
 							? "text-background"
@@ -101,7 +102,7 @@ export default function StatusSelector({
 					}`}
 				>
 					نادرست
-				</Text>
+				</StyledText>
 			</Pressable>
 			<Pressable
 				className={`rounded-xl p-4 ${
@@ -115,7 +116,7 @@ export default function StatusSelector({
 					setIsStatusSelected(true)
 				}}
 			>
-				<Text
+				<StyledText
 					className={`text-xl text-right ${
 						currentStatus === "UNANSWERED"
 							? "text-background"
@@ -123,7 +124,7 @@ export default function StatusSelector({
 					}`}
 				>
 					نزده
-				</Text>
+				</StyledText>
 			</Pressable>
 			<Pressable
 				onPress={() => storeHandler()}
@@ -132,9 +133,9 @@ export default function StatusSelector({
 					isStatusSelected ? "bg-accent" : "bg-text opacity-50"
 				}`}
 			>
-				<Text className="text-center text-xl text-background">
+				<StyledText className="text-center text-xl text-background">
 					بعدی
-				</Text>
+				</StyledText>
 			</Pressable>
 		</View>
 	)

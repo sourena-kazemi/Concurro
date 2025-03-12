@@ -1,9 +1,10 @@
-import { Text, View, Pressable } from "react-native"
+import { View, Pressable } from "react-native"
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import { type examInfo, type questionInfo } from "@/types/types"
 import { useCallback, useState } from "react"
 import AnalyticsViewer from "@/components/analytics/AnalyticsViewer"
+import StyledText from "@/components/StyledText"
 //@ts-ignore
 import PN from "persian-number"
 
@@ -52,18 +53,20 @@ export default function Exam() {
 	}
 	return (
 		<View className="flex-1 justify-center items-center bg-background px-4 gap-6">
-			<Text className="text-text text-3xl">{examInfo?.name}</Text>
+			<StyledText className="text-text text-3xl">
+				{examInfo?.name}
+			</StyledText>
 			<View className="flex flex-row gap-3">
-				<Text className="text-text text-xl">
-					<Text className="text-accent">
+				<StyledText className="text-text text-xl">
+					<StyledText className="text-accent">
 						{PN.convertEnToPe(examInfo?.size)}
-					</Text>
+					</StyledText>
 					سوال،{" "}
-					<Text className="text-accent">
+					<StyledText className="text-accent">
 						{PN.convertEnToPe(lastQuestion)}
-					</Text>{" "}
+					</StyledText>{" "}
 					ثبت شده
-				</Text>
+				</StyledText>
 			</View>
 			<Pressable
 				onPress={() => {
@@ -78,9 +81,9 @@ export default function Exam() {
 						: "bg-accent"
 				}`}
 			>
-				<Text className="text-background text-center text-xl">
+				<StyledText className="text-background text-center text-xl">
 					ثبت سوالات
-				</Text>
+				</StyledText>
 			</Pressable>
 			<Pressable
 				onPress={() => {
@@ -95,9 +98,9 @@ export default function Exam() {
 						: "bg-accent"
 				}`}
 			>
-				<Text className="text-background text-center text-xl">
+				<StyledText className="text-background text-center text-xl">
 					پاسخ برگ
-				</Text>
+				</StyledText>
 			</Pressable>
 		</View>
 	)

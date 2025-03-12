@@ -1,6 +1,7 @@
 import { topics } from "@/constants/topics"
 import { type section } from "@/types/types"
-import { View, Text, Pressable } from "react-native"
+import { View, Pressable } from "react-native"
+import StyledText from "../StyledText"
 
 type props = {
 	section: section
@@ -32,7 +33,7 @@ export default function Section({
 						currentTopic === topic ? "bg-primary" : "bg-secondary"
 					}`}
 				>
-					<Text
+					<StyledText
 						className={`text-xl text-right ${
 							currentTopic === topic
 								? "text-background"
@@ -40,7 +41,7 @@ export default function Section({
 						}`}
 					>
 						{topics[topic]}
-					</Text>
+					</StyledText>
 				</Pressable>
 			))}
 		</View>
