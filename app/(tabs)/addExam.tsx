@@ -99,7 +99,7 @@ export default function AddExam() {
 			showsVerticalScrollIndicator={false}
 			className="bg-background"
 		>
-			<View className="flex-1 items-center bg-background w-full gap-3 px-4 py-20 ">
+			<View className="flex-1 items-center justify-center bg-background w-full gap-3 px-4 py-20 ">
 				<StyledText className="text-text text-3xl">
 					افزودن آزمون
 				</StyledText>

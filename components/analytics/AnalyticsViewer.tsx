@@ -298,7 +298,7 @@ export default function AnalyticsViewer({ examId, title }: props) {
 					<StyledText className="text-text text-2xl">
 						{title}
 					</StyledText>
-					<View className="flex-row gap-3 items-center justify-end grow">
+					<View className="flex-row gap-3 items-center justify-start grow">
 						{examId !== "*" && (
 							<Pressable
 								onPress={() =>

@@ -106,7 +106,7 @@ export default function Exam() {
 			showsVerticalScrollIndicator={false}
 			className="bg-background"
 		>
-			<View className="px-4 py-20 justify-center items-center gap-6">
+			<View className="px-4 py-20 items-center gap-6">
 				<StyledText className="text-text text-6xl mt-6">
 					{PN.convertEnToPe(question)}
 				</StyledText>
