@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native"
+import { ScrollView, View, Text } from "react-native"
 import { useFocusEffect, useLocalSearchParams, router } from "expo-router"
 import { useSQLiteContext } from "expo-sqlite"
 import {
@@ -107,9 +107,7 @@ export default function Exam() {
 			className="bg-background"
 		>
 			<View className="px-4 py-20 items-center gap-6">
-				<StyledText className="text-text text-6xl mt-6">
-					{PN.convertEnToPe(question)}
-				</StyledText>
+				<Text className="text-text text-6xl mt-6">{question}</Text>
 				<StyledText className="text-text text-2xl">
 					{previewSubject === "MATHEMATICS"
 						? "ریاضیات"

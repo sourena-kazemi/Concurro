@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, View } from "react-native"
+import { Pressable, ScrollView, View, Text } from "react-native"
 import { useSQLiteContext } from "expo-sqlite"
 import { useCallback, useState } from "react"
 import { router, useFocusEffect } from "expo-router"
@@ -51,9 +51,9 @@ export default function Index() {
 						key={exam.id}
 					>
 						<View className="flex flex-row-reverse gap-3 items-center content-center">
-							<StyledText className="text-text text-3xl items-center self-center justify-self-center">{`${PN.convertEnToPe(
-								exam.id
-							)}`}</StyledText>
+							<Text className="text-text text-3xl items-center self-center justify-self-center">
+								{exam.id}
+							</Text>
 							<StyledText className="text-text text-xl font-bold text-right">{`${exam.name}`}</StyledText>
 						</View>
 						<StyledText className="text-background text-lg font-bold text-right">
